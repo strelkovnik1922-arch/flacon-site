@@ -103,22 +103,36 @@
   if (prod) {
     const d = prod.dataset;
     const btn = $('#addbtn'), qty = $('#qty');
-    // выбор цвета (модификации МС): меняет SKU заявки и фото (если есть у варианта)
+    // выбор цвета (модификации МС): меняет SKU заявки и фото; там где цвета есть — выбор ОБЯЗАТЕЛЕН
     let vsku = '', vcolor = '';
-    const vname = $('#vname');
+    const vname = $('#vname'), colorwarn = $('#colorwarn'), variantsEl = $('#variants');
+    const hasColors = document.querySelectorAll('.sw').length > 0;
     document.querySelectorAll('.sw').forEach((sw) => sw.onclick = () => {
       const was = sw.classList.contains('on');
       document.querySelectorAll('.sw').forEach((x) => { x.classList.remove('on'); x.setAttribute('aria-checked', 'false'); });
-      if (was) { vsku = ''; vcolor = ''; if (vname) vname.textContent = '—'; return; } // повторный клик = снять выбор
+      if (was) { vsku = ''; vcolor = ''; if (vname) { vname.textContent = t.chooseColor; vname.classList.add('vreq'); } setBtn(); return; }
       sw.classList.add('on'); sw.setAttribute('aria-checked', 'true');
       vsku = sw.dataset.sku; vcolor = sw.dataset.color;
-      if (vname) vname.textContent = vcolor;
+      if (vname) { vname.textContent = vcolor; vname.classList.remove('vreq'); }
+      if (colorwarn) colorwarn.hidden = true;
+      if (variantsEl) variantsEl.classList.remove('shake');
       if (sw.dataset.img) { const g = $('#galimg'); if (g) g.src = '/' + sw.dataset.img; }
+      setBtn();
     });
     const key = () => vsku || d.code;
     const setBtn = () => { btn.textContent = cart[key()] ? t.inCart : t.addCart; btn.classList.toggle('in', !!cart[key()]); };
     setBtn();
     btn.onclick = () => {
+      // цвет не выбран — не добавляем: предупреждаем и подсвечиваем свотчи
+      if (hasColors && !vsku) {
+        if (colorwarn) colorwarn.hidden = false;
+        if (variantsEl) {
+          variantsEl.classList.remove('shake'); void variantsEl.offsetWidth; // перезапуск анимации
+          variantsEl.classList.add('shake');
+          variantsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
       let q = parseInt(qty.value, 10) || 1;
       const moq = parseInt(d.moq, 10) || 1;
       if (q < moq) { q = moq; qty.value = q; }
