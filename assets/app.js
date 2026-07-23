@@ -1,19 +1,39 @@
 // Flacon KZ — каталог, фильтры, поиск, корзина (localStorage).
-let PRODUCTS = [], CATS = [], cat = 'all', cart = {};
+let PRODUCTS = [], CATS = [], cat = 'all', cart = {}, volFilter = '';
 
 const fmt = (n) => String(Math.round(n * 100) / 100).replace('.', ',');
 const $ = (s) => document.querySelector(s);
+
+// объём товара числом (для точного совпадения)
+const volNum = (s) => { const m = /(\d+[.,]?\d*)\s*мл/i.exec(s || ''); return m ? parseFloat(m[1].replace(',', '.')) : null; };
+// разбор запроса: точный объём отдельно от слов, чтобы «5 мл» не ловил «125 мл»
+function parseQuery(t) {
+  let volTarget = null, rest = t;
+  const vm = t.match(/(\d+(?:[.,]\d+)?)\s*мл/);
+  if (vm) { volTarget = parseFloat(vm[1].replace(',', '.')); rest = t.replace(vm[0], ' '); }
+  let terms = rest.split(/[^a-zа-я0-9.\-]+/i).map((s) => s.trim()).filter((w) => w.length >= 2 && w !== 'мл');
+  if (volTarget == null) {
+    const i = terms.findIndex((w) => /^\d+(?:[.,]\d+)?$/.test(w) && parseFloat(w.replace(',', '.')) <= 500);
+    if (i >= 0) { volTarget = parseFloat(terms[i].replace(',', '.')); terms.splice(i, 1); }
+  }
+  return { volTarget, terms };
+}
+function matchSearch(p, volTarget, terms) {
+  if (volTarget != null && volNum(p.vol || p.name) !== volTarget) return false;
+  if (terms.length) { const hay = (p.code + ' ' + p.name).toLowerCase(); if (!terms.every((w) => hay.includes(w))) return false; }
+  return true;
+}
 
 async function boot() {
   PRODUCTS = await (await fetch('data/products.json')).json();
   CATS = await (await fetch('data/cats.json')).json();
   cart = JSON.parse(localStorage.getItem('cart') || '{}');
-  buildTabs(); render(); updateCart();
   // deep-link ?cat=roller или ?q=атомайзер
   const p = new URLSearchParams(location.search);
   if (p.get('cat')) { cat = p.get('cat'); }
   if (p.get('q')) { $('#search').value = p.get('q'); }
-  buildTabs(); render();
+  const sel = $('#volsel'); if (sel) sel.onchange = (e) => { volFilter = e.target.value; render(); };
+  buildTabs(); buildVolOptions(); render(); updateCart();
 }
 
 function buildTabs() {
@@ -21,13 +41,23 @@ function buildTabs() {
   const all = [{ key: 'all', title: 'Все' }, ...CATS];
   el.innerHTML = all.map((c) =>
     `<div class="tab${c.key === cat ? ' on' : ''}" data-k="${c.key}">${c.title}</div>`).join('');
-  el.querySelectorAll('.tab').forEach((t) => t.onclick = () => { cat = t.dataset.k; buildTabs(); render(); });
+  el.querySelectorAll('.tab').forEach((t) => t.onclick = () => { cat = t.dataset.k; volFilter = ''; buildTabs(); buildVolOptions(); render(); });
+}
+
+// фильтр объёма — только объёмы, реально встречающиеся в текущей категории
+function buildVolOptions() {
+  const sel = $('#volsel'); if (!sel) return;
+  const pool = PRODUCTS.filter((p) => cat === 'all' || p.cat === cat);
+  const vols = [...new Set(pool.map((p) => p.vol).filter(Boolean))].sort((a, b) => (volNum(a) || 0) - (volNum(b) || 0));
+  sel.innerHTML = '<option value="">Любой объём</option>' + vols.map((v) => `<option value="${v}"${v === volFilter ? ' selected' : ''}>${v}</option>`).join('');
+  sel.style.display = vols.length ? '' : 'none';
 }
 
 function render() {
   const q = $('#search').value.trim().toLowerCase();
   let items = PRODUCTS.filter((p) => cat === 'all' || p.cat === cat);
-  if (q) items = items.filter((p) => (p.code + ' ' + p.name).toLowerCase().includes(q));
+  if (volFilter) items = items.filter((p) => p.vol === volFilter);
+  if (q) { const { volTarget, terms } = parseQuery(q); items = items.filter((p) => matchSearch(p, volTarget, terms)); }
   $('#cnt').textContent = items.length + ' товаров';
   const g = $('#grid');
   if (!items.length) { g.innerHTML = '<div class="empty">Ничего не найдено</div>'; return; }
