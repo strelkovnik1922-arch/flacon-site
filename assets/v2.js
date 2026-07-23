@@ -87,7 +87,7 @@
       $('#c-city').value.trim() && ('Город: ' + $('#c-city').value.trim()),
       $('#c-note').value.trim()].filter(Boolean).join(' | ');
     try {
-      const r = await fetch('/order.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const r = await fetch('/order2.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: $('#c-name').value.trim(), phone, note, items }) });
       if (!r.ok) throw new Error('http ' + r.status);
       cart = {}; save(); updateBadge();
@@ -201,7 +201,7 @@
       const note = ['ПОИСК ТОВАРА ПОД КЛИЕНТА ' + orderNo, what,
         $('#s-qty').value.trim() && ('Количество: ~' + $('#s-qty').value.trim())].filter(Boolean).join(' | ');
       try {
-        const r = await fetch('/order.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        const r = await fetch('/order2.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: $('#s-name').value.trim(), phone, note, items: [] }) });
         if (!r.ok) throw new Error('http');
         drawer.innerHTML = `${drawerHead(t.formSent)}<div class="empty" style="padding:30px">
