@@ -150,6 +150,7 @@ main .btn.line:hover{background:var(--red);color:#fff}
 
 /* лайтбокс */
 .lightbox{position:fixed;inset:0;background:rgba(10,10,10,.92);z-index:200;display:flex;align-items:center;justify-content:center}
+.lightbox[hidden]{display:none} /* КРИТИЧНО: display:flex перебивал hidden — окно висело поверх страницы всегда */
 .lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;touch-action:pinch-zoom;transition:transform .1s}
 .lbx{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:40px;line-height:1;min-width:48px;min-height:48px}
 .lbn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:0;color:#fff;font-size:38px;min-width:52px;min-height:64px;border-radius:12px}
