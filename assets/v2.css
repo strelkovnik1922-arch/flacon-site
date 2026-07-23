@@ -128,6 +128,18 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .bigpr b{color:var(--red);font-size:30px}
 .bigpr small{color:var(--grey);font-size:12.5px;font-weight:400}
 .moqline{margin-bottom:12px;font-size:15px}
+/* свотчи цветов */
+.csw{display:flex;gap:4px;align-items:center;margin:2px 0}
+.csw i{width:14px;height:14px;border-radius:50%;background:var(--c);display:inline-block}
+.csw i.lt{border:1px solid #c9c9c9}
+.csw em{font-style:normal;font-size:11px;color:var(--grey)}
+.variants{margin:6px 0 12px}
+.vlabel{font-size:14px;color:var(--grey)}
+.vlabel b{color:var(--ink)}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.sw{width:34px;height:34px;border-radius:50%;background:var(--c);border:2px solid transparent;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.sw.lt{box-shadow:0 0 0 1px #b9b9b9}
+.sw.on{border-color:#fff;box-shadow:0 0 0 3px var(--red)}
 .qtyrow{display:flex;align-items:center;gap:10px;margin:8px 0 14px}
 .qtyrow input{width:130px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px}
 .ctas{display:flex;flex-direction:column;gap:10px;max-width:420px}

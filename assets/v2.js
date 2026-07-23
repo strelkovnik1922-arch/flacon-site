@@ -103,13 +103,26 @@
   if (prod) {
     const d = prod.dataset;
     const btn = $('#addbtn'), qty = $('#qty');
-    const setBtn = () => { if (cart[d.code]) { btn.textContent = t.inCart; btn.classList.add('in'); } };
+    // выбор цвета (модификации МС): меняет SKU заявки и фото (если есть у варианта)
+    let vsku = '', vcolor = '';
+    const vname = $('#vname');
+    document.querySelectorAll('.sw').forEach((sw) => sw.onclick = () => {
+      const was = sw.classList.contains('on');
+      document.querySelectorAll('.sw').forEach((x) => { x.classList.remove('on'); x.setAttribute('aria-checked', 'false'); });
+      if (was) { vsku = ''; vcolor = ''; if (vname) vname.textContent = '—'; return; } // повторный клик = снять выбор
+      sw.classList.add('on'); sw.setAttribute('aria-checked', 'true');
+      vsku = sw.dataset.sku; vcolor = sw.dataset.color;
+      if (vname) vname.textContent = vcolor;
+      if (sw.dataset.img) { const g = $('#galimg'); if (g) g.src = '/' + sw.dataset.img; }
+    });
+    const key = () => vsku || d.code;
+    const setBtn = () => { btn.textContent = cart[key()] ? t.inCart : t.addCart; btn.classList.toggle('in', !!cart[key()]); };
     setBtn();
     btn.onclick = () => {
       let q = parseInt(qty.value, 10) || 1;
       const moq = parseInt(d.moq, 10) || 1;
       if (q < moq) { q = moq; qty.value = q; }
-      cart[d.code] = { code: d.code, nm: d.nm, priceCny: parseFloat(d.price), moq, unit: d.unit, img: '/' + d.img, qty: q };
+      cart[key()] = { code: key(), nm: d.nm + (vcolor ? ' (' + vcolor + ')' : ''), priceCny: parseFloat(d.price), moq, unit: d.unit, img: '/' + d.img, qty: q };
       save(); updateBadge(); setBtn(); window.openCart();
     };
 
