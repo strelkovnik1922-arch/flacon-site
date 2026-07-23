@@ -20,20 +20,31 @@
 </head>
 <body data-lang="kk"><header><div class="hbar">
   <a href="/kk/" class="logo"><img src="/images/logo.png" alt="Zhongshi 中石"><span>Flacon<b>.kz</b></span></a>
-  <nav aria-label="Main">
-    <a href="/kk/catalog/">Каталог</a>
+  <nav aria-label="Main"><a href="/kk/catalog/">Каталог</a>
     <a href="/kk/#about">Компания туралы</a>
-    <a href="/kk/#contacts">Байланыс</a>
-  </nav>
+    <a href="/kk/#contacts">Байланыс</a></nav>
   <div class="hr8">
-    <div class="langs" role="group" aria-label="Language"><a class="lg" href="/ru/catalog/diffuzor/" title="Русский">RU</a><span class="lg on">KK</span><a class="lg" href="/en/catalog/diffuzor/" title="English">EN</a></div>
+    <div class="langs desk" role="group" aria-label="Language"><a class="lg" href="/ru/catalog/diffuzor/" title="Русский">RU</a><span class="lg on">KZ</span><a class="lg" href="/en/catalog/diffuzor/" title="English">EN</a></div>
     
     <button class="cart-btn" onclick="openCart()" aria-label="Себет / Көтерме өтінім">🛒 <span class="cnt" id="cnt-cart">0</span></button>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
   </div>
+</div>
+<div class="mobmenu" id="mobmenu" hidden>
+  <nav aria-label="Mobile"><a href="/kk/catalog/">Каталог</a>
+    <a href="/kk/#about">Компания туралы</a>
+    <a href="/kk/#contacts">Байланыс</a></nav>
+  <div class="langs" role="group" aria-label="Language"><a class="lg" href="/ru/catalog/diffuzor/" title="Русский">RU</a><span class="lg on">KZ</span><a class="lg" href="/en/catalog/diffuzor/" title="English">EN</a></div>
 </div></header><main class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="/kk/">Басты бет</a> › <a href="/kk/catalog/">Каталог</a> › <span>Диффузор</span></nav><h1 class="pageh">Диффузор</h1>
   <div class="tabs"><a class="tab" href="/kk/catalog/">Барлық санаттар</a><a class="tab" href="/kk/catalog/avtoflakon/">Автофлакон</a><a class="tab" href="/kk/catalog/atomaizer/">Атомайзер</a><a class="tab" href="/kk/catalog/roller/">Роллер</a><a class="tab" href="/kk/catalog/karandash/">Қарындаш</a><a class="tab" href="/kk/catalog/pomadka/">Помадка</a><a class="tab on" href="/kk/catalog/diffuzor/">Диффузор</a><a class="tab" href="/kk/catalog/otdushka/">Хош иіс</a><a class="tab" href="/kk/catalog/monoaromat/">Моноаромат</a></div>
-  <div class="tools"><input id="search" type="search" placeholder="🔍 Атауы не SKU бойынша іздеу — мысалы «атомайзер 10 мл»" aria-label="Атауы не SKU бойынша іздеу — мысалы «атомайзер 10 мл»">
-  <div class="filters"><select id="f_vol" aria-label="Кез келген көлем"><option value="">Кез келген көлем</option><option>80 мл</option><option>125 мл</option><option>160 мл</option><option>200 мл</option></select>
+  <div class="tools"><div class="searchrow"><input id="search" type="search" placeholder="🔍 Атауы не SKU бойынша іздеу — мысалы «атомайзер 10 мл»" aria-label="Атауы не SKU бойынша іздеу — мысалы «атомайзер 10 мл»">
+  <button class="fbtn" id="ftoggle" aria-expanded="false" aria-controls="filters">⚙︎<span class="fdot" id="fdot" hidden></span></button></div>
+  <div class="filters" id="filters">
+  <div class="volrange" id="volrange">
+    <span class="vlab">Көлем: <b id="vollab">80–200 мл</b></span>
+    <div class="vsliders"><input type="range" id="vmin" min="80" max="200" step="0.5" value="80" aria-label="Көлем min">
+    <input type="range" id="vmax" min="80" max="200" step="0.5" value="200" aria-label="Көлем max"></div>
+  </div>
   <button id="freset" class="btn mini" hidden>Барлығын тазалау</button></div>
   <div class="cnt-line"><span id="cnt"></span></div></div>
   <div class="grid" id="grid"><a class="card" href="/kk/product/d020-125/"
@@ -44,7 +55,7 @@
     <span class="nm">Флакон для аромадиффузора, изумрудный градиент, 125 мл</span>
     <span class="pr">189 ₸ <em>/ 1 данаға</em></span>
     <span class="moq">Ең аз партия: 1 008 дана</span>
-    <span class="st">🏭 Зауыттан тапсырыспен (Қытай)</span>
+    <span class="st">🏭 Қытайдан тапсырыспен</span>
   </span></a><a class="card" href="/kk/product/bs038-160/"
   data-code="BS038-160" data-name="диффузор, прозрачный, с двойными стенками, 160мл" data-vol="160 мл" data-glass="прозрачное" data-shape="" data-roller="" data-cat="diffuzor">
   <span class="ph"><img loading="lazy" src="/images/BS038-160.jpg" alt="Диффузор, прозрачный, с двойными стенками, 160мл — BS038-160" width="500" height="500"></span>
@@ -53,7 +64,7 @@
     <span class="nm">Диффузор, прозрачный, с двойными стенками, 160мл</span>
     <span class="pr">719 ₸ <em>/ 1 данаға</em></span>
     <span class="moq">Ең аз партия: 73 дана</span>
-    <span class="st">🏭 Зауыттан тапсырыспен (Қытай)</span>
+    <span class="st">🏭 Қытайдан тапсырыспен</span>
   </span></a><a class="card" href="/kk/product/bs040-200/"
   data-code="BS040-200" data-name="диффузор, колба, с двойными стенками, 200мл" data-vol="200 мл" data-glass="" data-shape="колба" data-roller="" data-cat="diffuzor">
   <span class="ph"><img loading="lazy" src="/images/BS040-200.jpg" alt="Диффузор, колба, с двойными стенками, 200мл — BS040-200" width="500" height="500"></span>
@@ -62,7 +73,7 @@
     <span class="nm">Диффузор, колба, с двойными стенками, 200мл</span>
     <span class="pr">853 ₸ <em>/ 1 данаға</em></span>
     <span class="moq">Ең аз партия: 50 дана</span>
-    <span class="st">🏭 Зауыттан тапсырыспен (Қытай)</span>
+    <span class="st">🏭 Қытайдан тапсырыспен</span>
   </span></a><a class="card" href="/kk/product/bs039-80/"
   data-code="BS039-80" data-name="диффузор, с двойными стенками, 80мл" data-vol="80 мл" data-glass="" data-shape="" data-roller="" data-cat="diffuzor">
   <span class="ph"><img loading="lazy" src="/images/BS039-80.jpg" alt="Диффузор, с двойными стенками, 80мл — BS039-80" width="500" height="500"></span>
@@ -71,12 +82,12 @@
     <span class="nm">Диффузор, с двойными стенками, 80мл</span>
     <span class="pr">1 033 ₸ <em>/ 1 данаға</em></span>
     <span class="moq">Ең аз партия: 95 дана</span>
-    <span class="st">🏭 Зауыттан тапсырыспен (Қытай)</span>
+    <span class="st">🏭 Қытайдан тапсырыспен</span>
   </span></a></div>
   <p class="curnote">Теңгедегі баға — шамамен, ҚР Ұлттық банкінің бағамы 69.05 ₸/¥ (23.07.2026), жеткізусіз.</p></main><footer><div class="fin">
   <div><h4>Flacon.kz by Zhongshi 中石</h4>Қытайдан тікелей парфюмерия ыдысы мен майлар — көтерме. Бүкіл Қазақстан бойынша.
     <div class="zh"><img src="/images/logo.png" alt="Zhongshi 中石" width="54" height="54">
-    <span>Flacon.kz — казахстанское направление Zhongshi 中石.<br>Zhongshi (中石) — парфюмерия ыдысының өндірушісі және экспорттаушысы. Өндіруші сайты: zhongshi-cn.com</span></div></div>
+    <span>Flacon.kz — казахстанское направление Zhongshi 中石.<br>Zhongshi (中石) — Қытайдан парфюмерия ыдысының жеткізушісі. Жеткізуші сайты: zhongshi-cn.com</span></div></div>
   <div><h4>Каталог</h4><a href="/kk/catalog/avtoflakon/">Автофлакон</a><br><a href="/kk/catalog/atomaizer/">Атомайзер</a><br><a href="/kk/catalog/roller/">Роллер</a><br><a href="/kk/catalog/karandash/">Қарындаш</a><br><a href="/kk/catalog/pomadka/">Помадка</a><br><a href="/kk/catalog/diffuzor/">Диффузор</a><br><a href="/kk/catalog/otdushka/">Хош иіс</a><br><a href="/kk/catalog/monoaromat/">Моноаромат</a></div>
   <div id="contacts"><h4>Байланыс</h4><a href="https://t.me/FlaconKZ_Opt_bot" target="_blank" rel="noopener">✈️ Telegram: @FlaconKZ_Opt_bot</a></div>
 </div></footer>

@@ -24,9 +24,11 @@
   window.closeCart = () => { overlay.classList.remove('open'); drawer.classList.remove('open'); };
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { window.closeCart(); lbClose(); } });
 
+  const drawerHead = (title) => `<h3>${title}<button class="drawx" onclick="closeCart()" aria-label="Закрыть">×</button></h3>`;
+
   function drawCart() {
     const keys = Object.keys(cart);
-    let html = `<h3>🛒 ${t.cartTitle}</h3><div class="items">`;
+    let html = `${drawerHead('🛒 ' + t.cartTitle)}<div class="items">`;
     if (!keys.length) html += `<div class="empty">${t.cartEmpty}</div></div>`;
     else {
       for (const k of keys) {
@@ -58,7 +60,7 @@
   // ---------- заявка ----------
   function checkout() {
     const keys = Object.keys(cart); if (!keys.length) return;
-    drawer.innerHTML = `<h3>${t.cartTitle}</h3><div class="items form" style="padding:16px 18px">
+    drawer.innerHTML = `${drawerHead(t.cartTitle)}<div class="items form" style="padding:16px 18px">
       <input id="c-name" placeholder="${t.formName}" autocomplete="name">
       <input id="c-company" placeholder="${t.formCompany}" autocomplete="organization">
       <input id="c-phone" placeholder="${t.formPhone}" inputmode="tel" autocomplete="tel">
@@ -87,7 +89,7 @@
         body: JSON.stringify({ name: $('#c-name').value.trim(), phone, note, items }) });
       if (!r.ok) throw new Error('http ' + r.status);
       cart = {}; save(); updateBadge();
-      drawer.innerHTML = `<h3>${t.formSent}</h3><div class="empty" style="padding:30px">
+      drawer.innerHTML = `${drawerHead(t.formSent)}<div class="empty" style="padding:30px">
         ${t.formSentP}: <b>${orderNo}</b><br><br>${t.formSentP2}<br><br>
         <button class="btn red" onclick="closeCart()" style="max-width:220px;margin:0 auto">OK</button></div>`;
     } catch (e) {
@@ -146,12 +148,39 @@
     window.lbClose = () => {};
   }
 
+  // ---------- бургер-меню (мобайл) ----------
+  const burger = $('#burger'), mobmenu = $('#mobmenu');
+  if (burger && mobmenu) {
+    burger.onclick = () => {
+      const open = mobmenu.hidden;
+      mobmenu.hidden = !open;
+      burger.setAttribute('aria-expanded', String(open));
+      burger.textContent = open ? '×' : '☰';
+    };
+  }
+
   // ---------- каталог: фильтры/поиск по статичным карточкам ----------
   const grid = $('#grid');
   if (grid) {
     const cards = [...grid.querySelectorAll('.card')];
     const search = $('#search'), cnt = $('#cnt'), reset = $('#freset');
-    const sels = ['f_vol', 'f_glass', 'f_shape', 'f_roller'].map((id) => document.getElementById(id)).filter(Boolean);
+    const sels = ['f_glass', 'f_shape', 'f_roller'].map((id) => document.getElementById(id)).filter(Boolean);
+    // тоггл панели фильтров (мобайл)
+    const ftoggle = $('#ftoggle'), filtersEl = $('#filters'), fdot = $('#fdot');
+    if (ftoggle && filtersEl) ftoggle.onclick = () => {
+      const open = filtersEl.classList.toggle('open');
+      ftoggle.setAttribute('aria-expanded', String(open));
+    };
+    // ползунок объёма (от/до)
+    const vminEl = $('#vmin'), vmaxEl = $('#vmax'), vollab = $('#vollab');
+    const vBounds = vminEl ? [parseFloat(vminEl.min), parseFloat(vminEl.max)] : null;
+    function volRange() {
+      if (!vminEl) return null;
+      let a = parseFloat(vminEl.value), b = parseFloat(vmaxEl.value);
+      if (a > b) [a, b] = [b, a];
+      return [a, b];
+    }
+    function volActive() { const r = volRange(); return r && (r[0] > vBounds[0] || r[1] < vBounds[1]); }
     const volNum = (s) => { const m = /(\d+[.,]?\d*)/.exec(s || ''); return m ? parseFloat(m[1].replace(',', '.')) : null; };
     function parseQuery(q) {
       let volTarget = null, rest = q;
@@ -168,25 +197,33 @@
       const q = (search.value || '').trim().toLowerCase();
       const { volTarget, terms } = q ? parseQuery(q) : { volTarget: null, terms: [] };
       const fv = {}; sels.forEach((s) => fv[s.id] = s.value);
+      const vr = volActive() ? volRange() : null;
+      if (vollab) { const r = volRange(); vollab.textContent = r[0] + '–' + r[1] + ' мл'; }
       let shown = 0;
       for (const c of cards) {
         let ok = true;
-        if (fv.f_vol && c.dataset.vol !== fv.f_vol) ok = false;
-        if (ok && fv.f_glass && c.dataset.glass !== fv.f_glass) ok = false;
+        if (fv.f_glass && c.dataset.glass !== fv.f_glass) ok = false;
         if (ok && fv.f_shape && c.dataset.shape !== fv.f_shape) ok = false;
         if (ok && fv.f_roller && c.dataset.roller !== fv.f_roller) ok = false;
+        if (ok && vr) { const v = volNum(c.dataset.vol); ok = v != null && v >= vr[0] && v <= vr[1]; }
         if (ok && volTarget != null && volNum(c.dataset.vol) !== volTarget) ok = false;
         if (ok && terms.length) { const hay = c.dataset.code.toLowerCase() + ' ' + c.dataset.name; ok = terms.every((w) => hay.includes(w)); }
         c.style.display = ok ? '' : 'none';
         if (ok) shown++;
       }
       cnt.textContent = shown + ' ' + t.found;
-      const any = q || sels.some((s) => s.value);
+      const any = q || sels.some((s) => s.value) || volActive();
       reset.hidden = !any;
+      if (fdot) fdot.hidden = !(sels.some((s) => s.value) || volActive());
     }
     search.addEventListener('input', apply);
     sels.forEach((s) => s.addEventListener('change', apply));
-    reset.onclick = () => { search.value = ''; sels.forEach((s) => s.value = ''); apply(); };
+    if (vminEl) { vminEl.addEventListener('input', apply); vmaxEl.addEventListener('input', apply); }
+    reset.onclick = () => {
+      search.value = ''; sels.forEach((s) => s.value = '');
+      if (vminEl) { vminEl.value = vminEl.min; vmaxEl.value = vmaxEl.max; }
+      apply();
+    };
     // deep-link ?q= (в т.ч. со старых ссылок бота)
     const usp = new URLSearchParams(location.search);
     if (usp.get('q')) search.value = usp.get('q');

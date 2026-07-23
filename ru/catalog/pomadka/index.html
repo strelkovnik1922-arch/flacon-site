@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Помадка — Flacon.kz</title>
-<meta name="description" content="Помадка — Flacon.kz. Флаконы, атомайзеры, роллеры, диффузоры, отдушки и масла оптом напрямую из Китая. Доставка по Казахстану. Цены от фабрики Zhongshi 中石.">
+<meta name="description" content="Помадка — Flacon.kz. Флаконы, атомайзеры, роллеры, диффузоры, отдушки и масла оптом напрямую из Китая. Доставка в Казахстан. Цены поставщика Zhongshi 中石.">
 <link rel="canonical" href="https://flacon.kz/ru/catalog/pomadka/">
 <link rel="alternate" hreflang="ru-KZ" href="https://flacon.kz/ru/catalog/pomadka/">
 <link rel="alternate" hreflang="kk-KZ" href="https://flacon.kz/kk/catalog/pomadka/">
 <link rel="alternate" hreflang="en-KZ" href="https://flacon.kz/en/catalog/pomadka/">
 <link rel="alternate" hreflang="x-default" href="https://flacon.kz/ru/catalog/pomadka/">
 <meta property="og:title" content="Помадка — Flacon.kz">
-<meta property="og:description" content="Помадка — Flacon.kz. Флаконы, атомайзеры, роллеры, диффузоры, отдушки и масла оптом напрямую из Китая. Доставка по Казахстану. Цены от фабрики Zhongshi 中石.">
+<meta property="og:description" content="Помадка — Flacon.kz. Флаконы, атомайзеры, роллеры, диффузоры, отдушки и масла оптом напрямую из Китая. Доставка в Казахстан. Цены поставщика Zhongshi 中石.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://flacon.kz/ru/catalog/pomadka/">
 <meta property="og:image" content="https://flacon.kz/images/P001-5.jpg">
@@ -20,20 +20,31 @@
 </head>
 <body data-lang="ru"><header><div class="hbar">
   <a href="/ru/" class="logo"><img src="/images/logo.png" alt="Zhongshi 中石"><span>Flacon<b>.kz</b></span></a>
-  <nav aria-label="Main">
-    <a href="/ru/catalog/">Каталог</a>
+  <nav aria-label="Main"><a href="/ru/catalog/">Каталог</a>
     <a href="/ru/#about">О компании</a>
-    <a href="/ru/#contacts">Контакты</a>
-  </nav>
+    <a href="/ru/#contacts">Контакты</a></nav>
   <div class="hr8">
-    <div class="langs" role="group" aria-label="Language"><span class="lg on">RU</span><a class="lg" href="/kk/catalog/pomadka/" title="Қазақша">KK</a><a class="lg" href="/en/catalog/pomadka/" title="English">EN</a></div>
+    <div class="langs desk" role="group" aria-label="Language"><span class="lg on">RU</span><a class="lg" href="/kk/catalog/pomadka/" title="Қазақша">KZ</a><a class="lg" href="/en/catalog/pomadka/" title="English">EN</a></div>
     
     <button class="cart-btn" onclick="openCart()" aria-label="Корзина / Оптовая заявка">🛒 <span class="cnt" id="cnt-cart">0</span></button>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
   </div>
+</div>
+<div class="mobmenu" id="mobmenu" hidden>
+  <nav aria-label="Mobile"><a href="/ru/catalog/">Каталог</a>
+    <a href="/ru/#about">О компании</a>
+    <a href="/ru/#contacts">Контакты</a></nav>
+  <div class="langs" role="group" aria-label="Language"><span class="lg on">RU</span><a class="lg" href="/kk/catalog/pomadka/" title="Қазақша">KZ</a><a class="lg" href="/en/catalog/pomadka/" title="English">EN</a></div>
 </div></header><main class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="/ru/">Главная</a> › <a href="/ru/catalog/">Каталог</a> › <span>Помадка</span></nav><h1 class="pageh">Помадка</h1>
   <div class="tabs"><a class="tab" href="/ru/catalog/">Все категории</a><a class="tab" href="/ru/catalog/avtoflakon/">Автофлакон</a><a class="tab" href="/ru/catalog/atomaizer/">Атомайзер</a><a class="tab" href="/ru/catalog/roller/">Роллер</a><a class="tab" href="/ru/catalog/karandash/">Карандаш</a><a class="tab on" href="/ru/catalog/pomadka/">Помадка</a><a class="tab" href="/ru/catalog/diffuzor/">Диффузор</a><a class="tab" href="/ru/catalog/otdushka/">Отдушка</a><a class="tab" href="/ru/catalog/monoaromat/">Моноаромат</a></div>
-  <div class="tools"><input id="search" type="search" placeholder="🔍 Поиск по названию, SKU — например «атомайзер 10 мл»" aria-label="Поиск по названию, SKU — например «атомайзер 10 мл»">
-  <div class="filters"><select id="f_vol" aria-label="Любой объём"><option value="">Любой объём</option><option>5 мл</option><option>5.5 мл</option><option>6 мл</option><option>8 мл</option><option>9 мл</option><option>9.5 мл</option><option>10 мл</option><option>12 мл</option><option>14 мл</option><option>20 мл</option></select>
+  <div class="tools"><div class="searchrow"><input id="search" type="search" placeholder="🔍 Поиск по названию, SKU — например «атомайзер 10 мл»" aria-label="Поиск по названию, SKU — например «атомайзер 10 мл»">
+  <button class="fbtn" id="ftoggle" aria-expanded="false" aria-controls="filters">⚙︎<span class="fdot" id="fdot" hidden></span></button></div>
+  <div class="filters" id="filters">
+  <div class="volrange" id="volrange">
+    <span class="vlab">Объём: <b id="vollab">5–20 мл</b></span>
+    <div class="vsliders"><input type="range" id="vmin" min="5" max="20" step="0.5" value="5" aria-label="Объём min">
+    <input type="range" id="vmax" min="5" max="20" step="0.5" value="20" aria-label="Объём max"></div>
+  </div>
   <button id="freset" class="btn mini" hidden>Сбросить всё</button></div>
   <div class="cnt-line"><span id="cnt"></span></div></div>
   <div class="grid" id="grid"><a class="card" href="/ru/product/p001-5/"
@@ -44,7 +55,7 @@
     <span class="nm">Атомайзер-помадка 5мл, однотонный</span>
     <span class="pr">189 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 1 000 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p001-10/"
   data-code="P001-10" data-name="атомайзер-помадка 10мл, однотонный" data-vol="10 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P001-10.jpg" alt="Атомайзер-помадка 10мл, однотонный — P001-10" width="500" height="500"></span>
@@ -53,7 +64,7 @@
     <span class="nm">Атомайзер-помадка 10мл, однотонный</span>
     <span class="pr">198 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 624 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p005-5.5/"
   data-code="P005-5.5" data-name="атомайзер-помадка 5.5мл, квадрат" data-vol="5.5 мл" data-glass="" data-shape="квадрат" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P005-5.5.jpg" alt="Атомайзер-помадка 5.5мл, квадрат — P005-5.5" width="500" height="500"></span>
@@ -62,7 +73,7 @@
     <span class="nm">Атомайзер-помадка 5.5мл, квадрат</span>
     <span class="pr">225 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 5 000 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p002-5/"
   data-code="P002-5" data-name="атомайзер 5мл, со стразами в виде точки" data-vol="5 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P002-5.jpg" alt="Атомайзер 5мл, со стразами в виде точки — P002-5" width="500" height="500"></span>
@@ -71,7 +82,7 @@
     <span class="nm">Атомайзер 5мл, со стразами в виде точки</span>
     <span class="pr">230 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 1 000 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p004-5/"
   data-code="P004-5" data-name="атомайзер-помадка 5 мл, со стразами в виде цветка" data-vol="5 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P004-5.jpg" alt="Атомайзер-помадка 5 мл, со стразами в виде цветка — P004-5" width="500" height="500"></span>
@@ -80,7 +91,7 @@
     <span class="nm">Атомайзер-помадка 5 мл, со стразами в виде цветка</span>
     <span class="pr">230 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 1 000 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p001-12/"
   data-code="P001-12" data-name="атомайзер-помадка 12мл, однотонный" data-vol="12 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P001-12.jpg" alt="Атомайзер-помадка 12мл, однотонный — P001-12" width="500" height="500"></span>
@@ -89,7 +100,7 @@
     <span class="nm">Атомайзер-помадка 12мл, однотонный</span>
     <span class="pr">239 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 504 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p004-10/"
   data-code="P004-10" data-name="атомайзер-помадка 10мл, со стразами в виде цветка" data-vol="10 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P004-10.jpg" alt="Атомайзер-помадка 10мл, со стразами в виде цветка — P004-10" width="500" height="500"></span>
@@ -98,7 +109,7 @@
     <span class="nm">Атомайзер-помадка 10мл, со стразами в виде цветка</span>
     <span class="pr">243 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 624 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p005-10/"
   data-code="P005-10" data-name="атомайзер-помадка 10мл, квадрат" data-vol="10 мл" data-glass="" data-shape="квадрат" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P005-10.jpg" alt="Атомайзер-помадка 10мл, квадрат — P005-10" width="500" height="500"></span>
@@ -107,7 +118,7 @@
     <span class="nm">Атомайзер-помадка 10мл, квадрат</span>
     <span class="pr">от 243 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 540 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p014-6/"
   data-code="P014-6" data-name="атомайзер-помадка, 6мл, матовый" data-vol="6 мл" data-glass="матовое" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P014-6.jpg" alt="Атомайзер-помадка, 6мл, матовый — P014-6" width="500" height="500"></span>
@@ -116,7 +127,7 @@
     <span class="nm">Атомайзер-помадка, 6мл, матовый</span>
     <span class="pr">243 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 660 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p002-10/"
   data-code="P002-10" data-name="атомайзер-помадка 10мл, со стразами в виде точки" data-vol="10 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P002-10.jpg" alt="Атомайзер-помадка 10мл, со стразами в виде точки — P002-10" width="500" height="500"></span>
@@ -125,7 +136,7 @@
     <span class="nm">Атомайзер-помадка 10мл, со стразами в виде точки</span>
     <span class="pr">243 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 624 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p015-6/"
   data-code="P015-6" data-name="атомайзер-помадка, 6мл" data-vol="6 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P015-6.jpg" alt="Атомайзер-помадка, 6мл — P015-6" width="500" height="500"></span>
@@ -134,7 +145,7 @@
     <span class="nm">Атомайзер-помадка, 6мл</span>
     <span class="pr">243 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 660 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p003-8/"
   data-code="P003-8" data-name="атомайзер-помадка 8мл, с сердечками" data-vol="8 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P003-8.jpg" alt="Атомайзер-помадка 8мл, с сердечками — P003-8" width="500" height="500"></span>
@@ -143,7 +154,7 @@
     <span class="nm">Атомайзер-помадка 8мл, с сердечками</span>
     <span class="pr">261 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 5 000 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p005-6/"
   data-code="P005-6" data-name="зак_атомайзер-помадка 6мл, квадрат" data-vol="6 мл" data-glass="" data-shape="квадрат" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P005-6.jpg" alt="зак_Атомайзер-помадка 6мл, квадрат — P005-6" width="500" height="500"></span>
@@ -152,7 +163,7 @@
     <span class="nm">зак_Атомайзер-помадка 6мл, квадрат</span>
     <span class="pr">288 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 720 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p007-14/"
   data-code="P007-14" data-name="атомайзер-помадка 14мл, однотонный, глянцевая талия" data-vol="14 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P007-14.jpg" alt="Атомайзер-помадка 14мл, однотонный, глянцевая талия — P007-14" width="500" height="500"></span>
@@ -161,7 +172,7 @@
     <span class="nm">Атомайзер-помадка 14мл, однотонный, глянцевая талия</span>
     <span class="pr">306 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 504 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p018-10/"
   data-code="P018-10" data-name="атомайзер-помадка, треугольной формы, однотонный, 10мл" data-vol="10 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P018-10.jpg" alt="Атомайзер-помадка, треугольной формы, однотонный, 10мл — P018-10" width="500" height="500"></span>
@@ -170,7 +181,7 @@
     <span class="nm">Атомайзер-помадка, треугольной формы, однотонный, 10мл</span>
     <span class="pr">494 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 320 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p009-9/"
   data-code="P009-9" data-name="атомайзер-помадка 9мл, с орнаментом" data-vol="9 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P009-9.jpg" alt="Атомайзер-помадка 9мл, с орнаментом — P009-9" width="500" height="500"></span>
@@ -179,7 +190,7 @@
     <span class="nm">Атомайзер-помадка 9мл, с орнаментом</span>
     <span class="pr">512 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 400 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p017-9.5/"
   data-code="P017-9.5" data-name="полуавтоматическая флакон-помадка, 9.5 мл, белый глянец" data-vol="9.5 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P017-9.5.jpg" alt="Полуавтоматическая флакон-помадка, 9.5 мл, белый глянец — P017-9.5" width="500" height="500"></span>
@@ -188,7 +199,7 @@
     <span class="nm">Полуавтоматическая флакон-помадка, 9.5 мл, белый глянец</span>
     <span class="pr">521 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 400 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p016-9.5/"
   data-code="P016-9.5" data-name="полуавтоматическая флакон-помадка, 9.5мл" data-vol="9.5 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P016-9.5.jpg" alt="Полуавтоматическая флакон-помадка, 9.5мл — P016-9.5" width="500" height="500"></span>
@@ -197,7 +208,7 @@
     <span class="nm">Полуавтоматическая флакон-помадка, 9.5мл</span>
     <span class="pr">539 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 400 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p012-10/"
   data-code="P012-10" data-name="атомайзер-помадка 10мл, со стразами" data-vol="10 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P012-10.jpg" alt="Атомайзер-помадка 10мл, со стразами — P012-10" width="500" height="500"></span>
@@ -206,7 +217,7 @@
     <span class="nm">Атомайзер-помадка 10мл, со стразами</span>
     <span class="pr">629 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 300 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p008-20/"
   data-code="P008-20" data-name="атомайзер-помадка 20мл, однотонный" data-vol="20 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P008-20.jpg" alt="Атомайзер-помадка 20мл, однотонный — P008-20" width="500" height="500"></span>
@@ -215,7 +226,7 @@
     <span class="nm">Атомайзер-помадка 20мл, однотонный</span>
     <span class="pr">629 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 252 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p009-14/"
   data-code="P009-14" data-name="атомайзер-помадка 14мл, с орнаментом" data-vol="14 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P009-14.jpg" alt="Атомайзер-помадка 14мл, с орнаментом — P009-14" width="500" height="500"></span>
@@ -224,7 +235,7 @@
     <span class="nm">Атомайзер-помадка 14мл, с орнаментом</span>
     <span class="pr">647 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 300 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a><a class="card" href="/ru/product/p013-5/"
   data-code="P013-5" data-name="атомайзер-помадка, 5мл" data-vol="5 мл" data-glass="" data-shape="" data-roller="" data-cat="pomadka">
   <span class="ph"><img loading="lazy" src="/images/P013-5.jpg" alt="Атомайзер-помадка, 5мл — P013-5" width="500" height="500"></span>
@@ -233,12 +244,12 @@
     <span class="nm">Атомайзер-помадка, 5мл</span>
     <span class="pr">1 257 ₸ <em>/ за 1 шт</em></span>
     <span class="moq">Минимальная партия: 100 шт</span>
-    <span class="st">🏭 Под заказ с фабрики (Китай)</span>
+    <span class="st">🏭 Под заказ из Китая</span>
   </span></a></div>
   <p class="curnote">Цены в тенге — ориентировочные, по курсу Нацбанка РК 69.05 ₸/¥ на 23.07.2026, без доставки.</p></main><footer><div class="fin">
-  <div><h4>Flacon.kz by Zhongshi 中石</h4>Парфюмерная тара и масла напрямую из Китая оптом. Работаем по всему Казахстану.
+  <div><h4>Flacon.kz by Zhongshi 中石</h4>Парфюмерная тара и масла напрямую из Китая оптом. Доставка в Казахстан.
     <div class="zh"><img src="/images/logo.png" alt="Zhongshi 中石" width="54" height="54">
-    <span>Flacon.kz — казахстанское направление Zhongshi 中石.<br>Zhongshi (中石) — производитель и экспортёр парфюмерной тары и расходников. Сайт производителя: zhongshi-cn.com</span></div></div>
+    <span>Flacon.kz — казахстанское направление Zhongshi 中石.<br>Zhongshi (中石) — поставщик парфюмерной тары и расходников из Китая. Сайт поставщика: zhongshi-cn.com</span></div></div>
   <div><h4>Каталог</h4><a href="/ru/catalog/avtoflakon/">Автофлакон</a><br><a href="/ru/catalog/atomaizer/">Атомайзер</a><br><a href="/ru/catalog/roller/">Роллер</a><br><a href="/ru/catalog/karandash/">Карандаш</a><br><a href="/ru/catalog/pomadka/">Помадка</a><br><a href="/ru/catalog/diffuzor/">Диффузор</a><br><a href="/ru/catalog/otdushka/">Отдушка</a><br><a href="/ru/catalog/monoaromat/">Моноаромат</a></div>
   <div id="contacts"><h4>Контакты</h4><a href="https://t.me/FlaconKZ_Opt_bot" target="_blank" rel="noopener">✈️ Telegram: @FlaconKZ_Opt_bot</a></div>
 </div></footer>
