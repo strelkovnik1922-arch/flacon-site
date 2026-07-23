@@ -27,9 +27,12 @@
 </section>
 
 <div class="tools">
-  <div class="searchrow">
-    <input id="search" placeholder="🔍 Поиск по коду или названию — например «атомайзер 10 мл»" oninput="render()">
-    <select id="volsel" title="Фильтр по объёму"><option value="">Любой объём</option></select>
+  <input id="search" placeholder="🔍 Поиск по коду или названию — например «атомайзер 10 мл»" oninput="render()">
+  <div class="filters">
+    <select id="f_vol" title="Объём"></select>
+    <select id="f_glass" title="Стекло"></select>
+    <select id="f_shape" title="Форма"></select>
+    <select id="f_roller" title="Ролик"></select>
   </div>
   <div class="tabs" id="tabs"></div>
 </div>

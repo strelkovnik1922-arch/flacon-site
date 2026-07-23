@@ -26,10 +26,9 @@ nav a:hover{color:var(--red)}
 
 /* панель фильтров */
 .tools{max-width:1200px;margin:0 auto;padding:16px 18px;position:sticky;top:65px;background:var(--bg);z-index:40}
-.searchrow{display:flex;gap:10px}
-#search{flex:1;min-width:0;padding:13px 16px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff}
-#volsel{flex:0 0 auto;padding:0 14px;border:1px solid var(--line);border-radius:12px;font-size:15px;background:#fff;cursor:pointer;max-width:160px}
-@media(max-width:520px){#volsel{max-width:130px}}
+#search{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.filters select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff;cursor:pointer;max-width:48%}
 .tabs{display:flex;gap:8px;overflow-x:auto;padding-top:12px;-webkit-overflow-scrolling:touch}
 .tab{flex:0 0 auto;padding:9px 16px;border:1px solid var(--line);background:#fff;border-radius:22px;font-size:14px;cursor:pointer;white-space:nowrap}
 .tab.on{background:var(--red);color:#fff;border-color:var(--red)}

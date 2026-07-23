@@ -1,5 +1,13 @@
 // Flacon KZ — каталог, фильтры, поиск, корзина (localStorage).
-let PRODUCTS = [], CATS = [], cat = 'all', cart = {}, volFilter = '';
+let PRODUCTS = [], CATS = [], cat = 'all', cart = {};
+// фильтры-характеристики: каждый прячется, если в категории нет выбора
+const FILTERS = [
+  { key: 'vol', label: 'Любой объём', sort: (a, b) => (volNum(a) || 0) - (volNum(b) || 0) },
+  { key: 'glass', label: 'Любое стекло' },
+  { key: 'shape', label: 'Любая форма' },
+  { key: 'roller', label: 'Ролик: любой' },
+];
+const fval = { vol: '', glass: '', shape: '', roller: '' };
 
 const fmt = (n) => String(Math.round(n * 100) / 100).replace('.', ',');
 const $ = (s) => document.querySelector(s);
@@ -32,8 +40,8 @@ async function boot() {
   const p = new URLSearchParams(location.search);
   if (p.get('cat')) { cat = p.get('cat'); }
   if (p.get('q')) { $('#search').value = p.get('q'); }
-  const sel = $('#volsel'); if (sel) sel.onchange = (e) => { volFilter = e.target.value; render(); };
-  buildTabs(); buildVolOptions(); render(); updateCart();
+  for (const f of FILTERS) { const sel = document.getElementById('f_' + f.key); if (sel) sel.onchange = (e) => { fval[f.key] = e.target.value; render(); }; }
+  buildTabs(); buildFilters(); render(); updateCart();
 }
 
 function buildTabs() {
@@ -41,22 +49,30 @@ function buildTabs() {
   const all = [{ key: 'all', title: 'Все' }, ...CATS];
   el.innerHTML = all.map((c) =>
     `<div class="tab${c.key === cat ? ' on' : ''}" data-k="${c.key}">${c.title}</div>`).join('');
-  el.querySelectorAll('.tab').forEach((t) => t.onclick = () => { cat = t.dataset.k; volFilter = ''; buildTabs(); buildVolOptions(); render(); });
+  el.querySelectorAll('.tab').forEach((t) => t.onclick = () => {
+    cat = t.dataset.k;
+    for (const f of FILTERS) fval[f.key] = '';
+    buildTabs(); buildFilters(); render();
+  });
 }
 
-// фильтр объёма — только объёмы, реально встречающиеся в текущей категории
-function buildVolOptions() {
-  const sel = $('#volsel'); if (!sel) return;
+// наполняем каждый фильтр значениями, реально встречающимися в текущей категории; прячем, если выбора нет
+function buildFilters() {
   const pool = PRODUCTS.filter((p) => cat === 'all' || p.cat === cat);
-  const vols = [...new Set(pool.map((p) => p.vol).filter(Boolean))].sort((a, b) => (volNum(a) || 0) - (volNum(b) || 0));
-  sel.innerHTML = '<option value="">Любой объём</option>' + vols.map((v) => `<option value="${v}"${v === volFilter ? ' selected' : ''}>${v}</option>`).join('');
-  sel.style.display = vols.length ? '' : 'none';
+  for (const f of FILTERS) {
+    const sel = document.getElementById('f_' + f.key); if (!sel) continue;
+    let vals = [...new Set(pool.map((p) => p[f.key]).filter(Boolean))];
+    vals.sort(f.sort || ((a, b) => a.localeCompare(b)));
+    if (vals.length < 2) { sel.style.display = 'none'; sel.innerHTML = ''; fval[f.key] = ''; continue; }
+    sel.style.display = '';
+    sel.innerHTML = `<option value="">${f.label}</option>` + vals.map((v) => `<option value="${v}"${v === fval[f.key] ? ' selected' : ''}>${v}</option>`).join('');
+  }
 }
 
 function render() {
   const q = $('#search').value.trim().toLowerCase();
   let items = PRODUCTS.filter((p) => cat === 'all' || p.cat === cat);
-  if (volFilter) items = items.filter((p) => p.vol === volFilter);
+  for (const f of FILTERS) if (fval[f.key]) items = items.filter((p) => (p[f.key] || '') === fval[f.key]);
   if (q) { const { volTarget, terms } = parseQuery(q); items = items.filter((p) => matchSearch(p, volTarget, terms)); }
   $('#cnt').textContent = items.length + ' товаров';
   const g = $('#grid');
