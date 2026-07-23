@@ -10,9 +10,11 @@ if (!$raw || strlen($raw) > 100000) {
   exit;
 }
 
-// быстрая проверка, что это валидный JSON с телефоном и товарами
+// валидно: телефон + (товары ИЛИ описание для поиска под клиента)
 $o = json_decode($raw, true);
-if (!$o || empty($o['phone']) || empty($o['items']) || !is_array($o['items'])) {
+$hasItems = !empty($o['items']) && is_array($o['items']);
+$hasNote = !empty($o['note']) && is_string($o['note']) && strlen(trim($o['note'])) > 2;
+if (!$o || empty($o['phone']) || (!$hasItems && !$hasNote)) {
   http_response_code(400);
   echo '{"ok":false,"error":"invalid"}';
   exit;

@@ -180,6 +180,40 @@
     window.lbClose = () => {};
   }
 
+  // ---------- заявка на поиск товара под клиента ----------
+  window.openSourcing = () => {
+    drawer.innerHTML = `${drawerHead(t.srcBtn)}<div class="items form" style="padding:16px 18px">
+      <textarea id="s-what" rows="4" placeholder="${t.srcWhat}"></textarea>
+      <input id="s-qty" placeholder="${t.srcQty}" inputmode="numeric">
+      <input id="s-name" placeholder="${t.formName}" autocomplete="name">
+      <input id="s-phone" placeholder="${t.formPhone}" inputmode="tel" autocomplete="tel">
+      <div class="err" id="s-err">${t.srcErr}</div>
+      <input class="hp" id="s-web" tabindex="-1" autocomplete="off" placeholder="website">
+      <button class="btn red big" id="s-send">${t.srcSend}</button>
+      <p class="agree">${t.formAgree}</p></div>`;
+    overlay.classList.add('open'); drawer.classList.add('open');
+    $('#s-send').onclick = async () => {
+      const what = $('#s-what').value.trim(), phone = $('#s-phone').value.trim();
+      if (what.length < 3 || !/[\d+][\d\s()-]{6,}/.test(phone)) { $('#s-err').style.display = 'block'; return; }
+      if ($('#s-web').value) return; // honeypot
+      const btn2 = $('#s-send'); btn2.disabled = true; btn2.textContent = '…';
+      const orderNo = 'FLX-S-' + Date.now().toString(36).toUpperCase();
+      const note = ['ПОИСК ТОВАРА ПОД КЛИЕНТА ' + orderNo, what,
+        $('#s-qty').value.trim() && ('Количество: ~' + $('#s-qty').value.trim())].filter(Boolean).join(' | ');
+      try {
+        const r = await fetch('/order.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: $('#s-name').value.trim(), phone, note, items: [] }) });
+        if (!r.ok) throw new Error('http');
+        drawer.innerHTML = `${drawerHead(t.formSent)}<div class="empty" style="padding:30px">
+          ${t.formSentP}: <b>${orderNo}</b><br><br>${t.formSentP2}<br><br>
+          <button class="btn red" onclick="closeCart()" style="max-width:220px;margin:0 auto">OK</button></div>`;
+      } catch (e) {
+        btn2.disabled = false; btn2.textContent = t.srcSend;
+        const er = $('#s-err'); er.textContent = t.formErr; er.style.display = 'block';
+      }
+    };
+  };
+
   // ---------- бургер-меню (мобайл) ----------
   const burger = $('#burger'), mobmenu = $('#mobmenu');
   if (burger && mobmenu) {
@@ -257,6 +291,9 @@
       const any = q || sels.some((s) => s.value) || volActive();
       reset.hidden = !any;
       if (fdot) fdot.hidden = !(sels.some((s) => s.value) || volActive());
+      // ничего не нашлось — предлагаем поиск товара под клиента
+      const nores = document.getElementById('noresults');
+      if (nores) nores.hidden = shown > 0;
     }
     search.addEventListener('input', apply);
     sels.forEach((s) => s.addEventListener('change', apply));
