@@ -3,3 +3,12 @@ RewriteEngine On
 # старые ссылки ?cat=... и ?q=... ведут в новый каталог
 RewriteCond %{QUERY_STRING} (^|&)(cat|q)= [NC]
 RewriteRule ^(index\.html)?$ /ru/catalog/ [R=301,L,QSA]
+# HTML не кэшировать намертво — деплой должен доезжать до клиентов сразу
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(css|js|jpg|png)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
