@@ -1,0 +1,24 @@
+{
+  "_comment": "Редактируемые данные сайта. После правки — перегенерировать: node 04_Scripts/site_v2/build.js. Пустые строки = блок скрыт на сайте.",
+  "brandFormula": "Flacon.kz by Zhongshi 中石",
+  "legalLine": "Flacon.kz — казахстанское направление Zhongshi 中石",
+  "legalNote": "Юридическая формулировка связи компаний уточняется — до подтверждения используется нейтральная. Проверить юристом РК.",
+  "manufacturerSite": "zhongshi-cn.com",
+  "contacts": {
+    "telegram": "FlaconKZ_Opt_bot",
+    "whatsapp": "",
+    "phone": "",
+    "email": "",
+    "address": "",
+    "hours": ""
+  },
+  "currency": {
+    "kztPerCny": 69.05,
+    "rateDate": "23.07.2026",
+    "rateSource": "Нацбанк РК"
+  },
+  "delivery": {
+    "note": "Доставка по Казахстану рассчитывается отдельно под вес и объём вашей партии. Точный срок и стоимость пришлём при расчёте заявки.",
+    "leadTime": ""
+  }
+}

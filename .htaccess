@@ -1,0 +1,5 @@
+ErrorDocument 404 /404.html
+RewriteEngine On
+# старые ссылки ?cat=... и ?q=... ведут в новый каталог
+RewriteCond %{QUERY_STRING} (^|&)(cat|q)= [NC]
+RewriteRule ^(index\.html)?$ /ru/catalog/ [R=301,L,QSA]
