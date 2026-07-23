@@ -52,8 +52,10 @@
   }
   function step(k, dir) {
     const it = cart[k]; if (!it) return;
-    const stp = it.unit === 'г' ? 100 : Math.max(10, Math.round((it.moq || 10) / 10));
+    // шаг = коробка (заказ целыми коробками); без коробки — как раньше
+    const stp = it.box || (it.unit === 'г' ? 100 : Math.max(10, Math.round((it.moq || 10) / 10)));
     it.qty = Math.max(it.moq || 1, it.qty + dir * stp);
+    if (it.box) it.qty = Math.ceil(it.qty / it.box) * it.box;
     save(); drawCart(); updateBadge();
   }
 
@@ -135,8 +137,11 @@
       }
       let q = parseInt(qty.value, 10) || 1;
       const moq = parseInt(d.moq, 10) || 1;
-      if (q < moq) { q = moq; qty.value = q; }
-      cart[key()] = { code: key(), nm: d.nm + (vcolor ? ' (' + vcolor + ')' : ''), priceCny: parseFloat(d.price), moq, unit: d.unit, img: '/' + d.img, qty: q };
+      const box = parseInt(d.box, 10) || 0;
+      if (q < moq) q = moq;
+      if (box) q = Math.ceil(q / box) * box; // заказ целыми коробками
+      qty.value = q;
+      cart[key()] = { code: key(), nm: d.nm + (vcolor ? ' (' + vcolor + ')' : ''), priceCny: parseFloat(d.price), moq, box, unit: d.unit, img: '/' + d.img, qty: q };
       save(); updateBadge(); setBtn(); window.openCart();
     };
 
