@@ -225,6 +225,15 @@
       }
       return { volTarget, terms };
     }
+    // подгруппы (упаковка): кнопки «Пакеты / Мешочки / Конверты…»
+    let activeSub = '';
+    const stabs = [...document.querySelectorAll('.stab')];
+    stabs.forEach((b) => b.onclick = () => {
+      activeSub = b.dataset.sub;
+      stabs.forEach((x) => x.classList.toggle('on', x === b));
+      apply();
+    });
+
     function apply() {
       const q = (search.value || '').trim().toLowerCase();
       const { volTarget, terms } = q ? parseQuery(q) : { volTarget: null, terms: [] };
@@ -234,7 +243,8 @@
       let shown = 0;
       for (const c of cards) {
         let ok = true;
-        if (fv.f_glass && c.dataset.glass !== fv.f_glass) ok = false;
+        if (activeSub && c.dataset.sub !== activeSub) ok = false;
+        if (ok && fv.f_glass && c.dataset.glass !== fv.f_glass) ok = false;
         if (ok && fv.f_shape && c.dataset.shape !== fv.f_shape) ok = false;
         if (ok && fv.f_roller && c.dataset.roller !== fv.f_roller) ok = false;
         if (ok && vr) { const v = volNum(c.dataset.vol); ok = v != null && v >= vr[0] && v <= vr[1]; }

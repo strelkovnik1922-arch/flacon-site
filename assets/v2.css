@@ -78,6 +78,10 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch}
 .tab{flex:0 0 auto;padding:10px 16px;border:1px solid var(--line);background:#fff;border-radius:22px;font-size:14px;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center}
 .tab.on{background:var(--red);color:#fff;border-color:var(--red)}
+/* подгруппы категории (упаковка: пакеты/мешочки/конверты...) */
+.subtabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;-webkit-overflow-scrolling:touch}
+.stab{flex:0 0 auto;padding:8px 14px;border:1px dashed var(--gold);background:#fff;border-radius:18px;font-size:13.5px;white-space:nowrap;min-height:40px;color:#7a6427}
+.stab.on{background:var(--gold);color:#fff;border-style:solid}
 .tools{position:sticky;top:64px;background:var(--bg);z-index:40;padding:6px 0 4px}
 .searchrow{display:flex;gap:8px}
 #search{flex:1;min-width:0;padding:13px 16px;border:1px solid var(--line);border-radius:var(--r-m);font-size:16px;background:#fff}
