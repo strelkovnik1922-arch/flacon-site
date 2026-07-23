@@ -124,6 +124,7 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .skuline{color:var(--grey);font-size:14px;margin-bottom:12px}
 .skuline b{color:var(--ink)}
 .st{color:#7c6a1e}
+.motif{background:#fff;border-left:3px solid var(--gold);border-radius:6px;padding:10px 14px;font-size:14.5px;color:#4a4a4a;margin:0 0 12px}
 .bigpr{font-size:20px;margin:6px 0 10px}
 .bigpr b{color:var(--red);font-size:30px}
 .bigpr small{color:var(--grey);font-size:12.5px;font-weight:400}
