@@ -41,7 +41,9 @@
       html += `</div><div class="foot"><div class="total"><span>${t.cartTotal}:</span><span>${fmtN(kzt(totals()))} ₸</span></div>
         <div class="note">${t.cartNote}</div>
         <button class="btn red big" id="go-checkout">${t.checkout}</button>
-        <button class="btn mini" id="go-clear" style="margin-top:8px">${t.clear}</button></div>`;
+        <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn mini" id="go-continue">${t.contShop}</button>
+        <button class="btn mini" id="go-clear">${t.clear}</button></div></div>`;
     }
     drawer.innerHTML = html;
     drawer.querySelectorAll('[data-m]').forEach((b) => b.onclick = () => step(b.dataset.m, -1));
@@ -49,6 +51,7 @@
     drawer.querySelectorAll('[data-r]').forEach((b) => b.onclick = () => { delete cart[b.dataset.r]; save(); updateBadge(); drawCart(); });
     const go = $('#go-checkout'); if (go) go.onclick = checkout;
     const cl = $('#go-clear'); if (cl) cl.onclick = () => { cart = {}; save(); updateBadge(); drawCart(); };
+    const co = $('#go-continue'); if (co) co.onclick = window.closeCart; // продолжить выбор = закрыть корзину
   }
   function step(k, dir) {
     const it = cart[k]; if (!it) return;
@@ -131,6 +134,16 @@
       if (sw.dataset.img) { const g = $('#galimg'); if (g) g.src = '/' + sw.dataset.img; }
       setBtn();
     });
+    // «Назад в каталог»: если пришли со страницы каталога — вернуться с сохранением места и фильтров
+    const back = $('#backcat');
+    if (back) back.addEventListener('click', (e) => {
+      try {
+        if (document.referrer && new URL(document.referrer).origin === location.origin && document.referrer.includes('/catalog/')) {
+          e.preventDefault(); history.back();
+        }
+      } catch { /* обычный переход по href */ }
+    });
+
     const key = () => vsku || d.code;
     const setBtn = () => { btn.textContent = cart[key()] ? t.inCart : t.addCart; btn.classList.toggle('in', !!cart[key()]); };
     setBtn();
