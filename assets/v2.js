@@ -327,9 +327,16 @@
       if (vminEl) { vminEl.value = vminEl.min; vmaxEl.value = vmaxEl.max; }
       apply();
     };
-    // deep-link ?q= (в т.ч. со старых ссылок бота)
+    // deep-link: ?q= (поиск), ?vmin=&vmax= (диапазон объёма — бот шлёт клиента с готовым фильтром), ?sub= (подгруппа)
     const usp = new URLSearchParams(location.search);
     if (usp.get('q')) search.value = usp.get('q');
+    if (vminEl && usp.get('vmin')) vminEl.value = usp.get('vmin');
+    if (vmaxEl && usp.get('vmax')) vmaxEl.value = usp.get('vmax');
+    if (usp.get('sub')) {
+      const want = usp.get('sub');
+      const st = stabs.find((b) => b.dataset.sub === want);
+      if (st) { activeSub = want; stabs.forEach((x) => x.classList.toggle('on', x === st)); }
+    }
     apply();
   }
 
