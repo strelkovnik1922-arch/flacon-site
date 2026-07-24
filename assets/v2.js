@@ -59,6 +59,12 @@
     save(); drawCart(); updateBadge();
   }
 
+  // ---------- фильтры ввода: телефон только цифрами, текстовые поля только буквами ----------
+  const filterInput = (el, re) => { if (!el) return; el.addEventListener('input', () => { const v = el.value.replace(re, ''); if (v !== el.value) el.value = v; }); };
+  const phoneOnly = (el) => { if (el) { el.setAttribute('inputmode', 'tel'); filterInput(el, /[^\d+\s()-]/g); } };          // цифры и + ( ) -
+  const lettersOnly = (el) => filterInput(el, /[^\p{L}\s\-'.]/gu);                                                          // буквы (ru/kz/en), пробел, дефис
+  const lettersDigits = (el) => filterInput(el, /[^\p{L}\p{N}\s\-'.@+_]/gu);                                                // компания/мессенджер: + цифры и @
+
   // ---------- заявка ----------
   function checkout() {
     const keys = Object.keys(cart); if (!keys.length) return;
@@ -73,11 +79,15 @@
       <input class="hp" id="c-web" tabindex="-1" autocomplete="off" placeholder="website">
       <button class="btn red big" id="c-send">${t.formSend}</button>
       <p class="agree">${t.formAgree}</p></div>`;
+    phoneOnly($('#c-phone')); lettersOnly($('#c-name')); lettersOnly($('#c-city')); lettersDigits($('#c-company')); lettersDigits($('#c-msngr'));
     $('#c-send').onclick = submitOrder;
   }
   async function submitOrder() {
+    const err = $('#c-err');
+    const name = $('#c-name').value.trim();
+    if (name.length < 2) { err.textContent = t.nameReq; err.style.display = 'block'; $('#c-name').focus(); return; }
     const phone = $('#c-phone').value.trim();
-    if (!/[\d+][\d\s()-]{6,}/.test(phone)) { $('#c-err').style.display = 'block'; $('#c-phone').focus(); return; }
+    if (!/[\d+][\d\s()-]{6,}/.test(phone)) { err.textContent = t.phoneReq; err.style.display = 'block'; $('#c-phone').focus(); return; }
     if ($('#c-web').value) return; // honeypot: бот заполнил скрытое поле
     const btn = $('#c-send'); btn.disabled = true; btn.textContent = '…';
     const orderNo = 'FLX-' + Date.now().toString(36).toUpperCase();
@@ -192,6 +202,7 @@
       <button class="btn red big" id="s-send">${t.srcSend}</button>
       <p class="agree">${t.formAgree}</p></div>`;
     overlay.classList.add('open'); drawer.classList.add('open');
+    phoneOnly($('#s-phone')); lettersOnly($('#s-name'));
     $('#s-send').onclick = async () => {
       const what = $('#s-what').value.trim(), phone = $('#s-phone').value.trim();
       if (what.length < 3 || !/[\d+][\d\s()-]{6,}/.test(phone)) { $('#s-err').style.display = 'block'; return; }
