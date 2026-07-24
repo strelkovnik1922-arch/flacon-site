@@ -210,15 +210,33 @@
       <input id="s-qty" placeholder="${t.srcQty}" inputmode="numeric">
       <input id="s-name" placeholder="${t.formName}" autocomplete="name">
       <input id="s-phone" placeholder="${t.formPhone}" inputmode="tel" autocomplete="tel">
+      <label class="filelbl" for="s-photo">📷 ${t.srcPhoto}</label>
+      <input id="s-photo" type="file" accept="image/jpeg,image/png,image/webp">
+      <div class="filehint">${t.srcPhotoHint}</div>
       <div class="err" id="s-err">${t.srcErr}</div>
       <input class="hp" id="s-web" tabindex="-1" autocomplete="off" placeholder="website">
       <button class="btn red big" id="s-send">${t.srcSend}</button>
       <p class="agree">${t.formAgree}</p></div>`;
     overlay.classList.add('open'); drawer.classList.add('open');
     phoneOnly($('#s-phone')); lettersOnly($('#s-name'));
+    phoneOnly($('#s-phone')); lettersOnly($('#s-name'));
+    // читаем фото в base64 с проверкой формата и размера (JPG/PNG/WebP, до 5 МБ)
+    let photoData = '';
+    const photoEl = $('#s-photo'), err = $('#s-err');
+    photoEl.onchange = () => {
+      photoData = '';
+      const f = photoEl.files && photoEl.files[0];
+      if (!f) return;
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { err.textContent = t.srcPhotoBad; err.style.display = 'block'; photoEl.value = ''; return; }
+      if (f.size > 5 * 1024 * 1024) { err.textContent = t.srcPhotoBig; err.style.display = 'block'; photoEl.value = ''; return; }
+      err.style.display = 'none';
+      const fr = new FileReader();
+      fr.onload = () => { photoData = fr.result; };
+      fr.readAsDataURL(f);
+    };
     $('#s-send').onclick = async () => {
-      const what = $('#s-what').value.trim(), phone = $('#s-phone').value.trim();
-      if (what.length < 3 || !/[\d+][\d\s()-]{6,}/.test(phone)) { $('#s-err').style.display = 'block'; return; }
+      const what = $('#s-what').value.trim(), phone = $('#s-phone').value.trim(), name = $('#s-name').value.trim();
+      if (what.length < 3 || name.length < 2 || !/[\d+][\d\s()-]{6,}/.test(phone)) { err.textContent = t.srcErr; err.style.display = 'block'; return; }
       if ($('#s-web').value) return; // honeypot
       const btn2 = $('#s-send'); btn2.disabled = true; btn2.textContent = '…';
       const orderNo = 'FLX-S-' + Date.now().toString(36).toUpperCase();
@@ -226,7 +244,7 @@
         $('#s-qty').value.trim() && ('Количество: ~' + $('#s-qty').value.trim())].filter(Boolean).join(' | ');
       try {
         const r = await fetch('/order2.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: $('#s-name').value.trim(), phone, note, items: [] }) });
+          body: JSON.stringify({ name, phone, note, items: [], photo: photoData }) });
         if (!r.ok) throw new Error('http');
         drawer.innerHTML = `${drawerHead(t.formSent)}<div class="empty" style="padding:30px">
           ${t.formSentP}: <b>${orderNo}</b><br><br>${t.formSentP2}<br><br>

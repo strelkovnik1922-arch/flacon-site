@@ -4,7 +4,7 @@
 header('Content-Type: application/json; charset=utf-8');
 
 $raw = file_get_contents('php://input');
-if (!$raw || strlen($raw) > 100000) {
+if (!$raw || strlen($raw) > 9000000) { // до ~9 МБ: заявка + фото (5 МБ) в base64
   http_response_code(400);
   echo '{"ok":false,"error":"empty"}';
   exit;
@@ -38,12 +38,21 @@ if ($hasItems) {
     if (count($items) >= 100) break;
   }
 }
-$payload = json_encode([
+// фото (заявка на поиск): только data:image jpg/png/webp, до ~6.8 МБ base64 (=5 МБ файл)
+$photo = '';
+if (!empty($o['photo']) && is_string($o['photo'])
+    && preg_match('#^data:image/(jpeg|jpg|png|webp);base64,#', $o['photo'])
+    && strlen($o['photo']) <= 7000000) {
+  $photo = $o['photo'];
+}
+$out = [
   'name'  => clean_str(isset($o['name']) ? $o['name'] : '', 80),
   'phone' => clean_str($o['phone'], 40),
   'note'  => clean_str(isset($o['note']) ? $o['note'] : '', 1000),
   'items' => $items,
-], JSON_UNESCAPED_UNICODE);
+];
+if ($photo) $out['photo'] = $photo;
+$payload = json_encode($out, JSON_UNESCAPED_UNICODE);
 
 $BOT = 'http://85.209.3.16:8081/order';
 $ch = curl_init($BOT);
@@ -52,7 +61,7 @@ curl_setopt_array($ch, [
   CURLOPT_POSTFIELDS     => $payload,
   CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
   CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_TIMEOUT        => 12,
+  CURLOPT_TIMEOUT        => 25,
 ]);
 $resp = curl_exec($ch);
 $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
