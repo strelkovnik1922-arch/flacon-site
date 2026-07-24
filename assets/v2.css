@@ -61,6 +61,9 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .btn.big{width:100%;font-size:17px}
 .btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{border-color:var(--grey)}
+.btn.wa{background:#25D366;color:#fff}
+.btn.wa:hover{background:#1eb457}
+.hic{font-size:19px;min-width:40px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .btn.mini{min-height:36px;padding:6px 14px;font-size:13.5px;background:#fff;border:1px solid var(--line)}
 .btn[disabled]{opacity:.55;pointer-events:none}
 
