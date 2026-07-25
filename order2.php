@@ -52,6 +52,7 @@ $out = [
   'contact' => clean_str(isset($o['contact']) ? $o['contact'] : '', 20),   // WhatsApp / Telegram
   'city'    => clean_str(isset($o['city']) ? $o['city'] : '', 60),
   'address' => clean_str(isset($o['address']) ? $o['address'] : '', 200),
+  'rate'    => isset($o['rate']) ? (float)$o['rate'] : 0,
   'items'   => $items,
 ];
 if ($photo) $out['photo'] = $photo;

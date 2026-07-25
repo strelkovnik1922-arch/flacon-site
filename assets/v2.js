@@ -40,8 +40,9 @@
           <button class="rm" data-r="${k}" aria-label="Удалить">×</button></div>`;
       }
       html += `</div><div class="foot"><div class="total"><span>${t.cartTotal}:</span><span>${fmtN(kzt(totals()))} ₸</span></div>
-        <div class="note">${t.cartNote}</div>
+        <div class="nodelivery">🚚 ${t.noDelivery}</div>
         <button class="btn red big" id="go-checkout">${t.checkout}</button>
+        <button class="btn line" id="go-search" style="width:100%;margin-top:8px;font-size:14px">${t.srcBtn}</button>
         <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn mini" id="go-continue">${t.contShop}</button>
         <button class="btn mini" id="go-clear">${t.clear}</button></div></div>`;
@@ -53,6 +54,7 @@
     const go = $('#go-checkout'); if (go) go.onclick = checkout;
     const cl = $('#go-clear'); if (cl) cl.onclick = () => { cart = {}; save(); updateBadge(); drawCart(); };
     const co = $('#go-continue'); if (co) co.onclick = window.closeCart; // продолжить выбор = закрыть корзину
+    const gs = $('#go-search'); if (gs) gs.onclick = () => window.openSourcing(); // не нашли товар → форма поиска
   }
   function step(k, dir) {
     const it = cart[k]; if (!it) return;
@@ -140,7 +142,7 @@
     const note = [$('#c-company').value.trim() && ('Компания: ' + $('#c-company').value.trim()), $('#c-note').value.trim()].filter(Boolean).join(' | ');
     try {
       const r = await fetch('/order2.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, note, items, contact, city, address }) });
+        body: JSON.stringify({ name, phone, note, items, contact, city, address, rate: FLX.rate }) });
       if (!r.ok) throw new Error('http ' + r.status);
       let data = {}; try { data = await r.json(); } catch {}
       const orderNo = data.order || null;          // номер заказа из МойСклада (решение CEO)
