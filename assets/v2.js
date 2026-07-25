@@ -302,23 +302,27 @@
       [t.moq, moq ? fmtN(moq) : ''], [t.box, box ? fmtN(box) : '']].filter(([, v]) => v);
     const wrap = document.createElement('div');
     wrap.className = 'pmodal';
+    // крестик и панель «количество + в корзину» зафиксированы; прокручивается только контент (просьба CEO 25.07)
     wrap.innerHTML = `<div class="pmbox" role="dialog" aria-modal="true">
       <button class="pmx" aria-label="Закрыть">×</button>
-      <div class="pmgal"><img class="pmimg" src="/${p.imgs[0]}" alt="">
-        ${p.imgs.length > 1 ? `<div class="pmthumbs">${p.imgs.map((im, i) => `<button class="th${i === 0 ? ' on' : ''}" data-src="/${im}"><img src="/${im}" alt=""></button>`).join('')}</div>` : ''}
+      <div class="pmgrid">
+        <div class="pmgal"><img class="pmimg" src="/${p.imgs[0]}" alt="">
+          ${p.imgs.length > 1 ? `<div class="pmthumbs">${p.imgs.map((im, i) => `<button class="th${i === 0 ? ' on' : ''}" data-src="/${im}"><img src="/${im}" alt=""></button>`).join('')}</div>` : ''}
+        </div>
+        <div class="pminfo">
+          <h3>${p.name}</h3>
+          <p class="skuline">${t.sku}: <b>${p.code}</b> · <span class="st">🏭 ${t.statusOrder}</span></p>
+          ${p.motif ? `<p class="motif">${p.motif}</p>` : ''}
+          <p class="bigpr">${p.multi ? t.priceFrom + ' ' : ''}<b>${priceK} ₸</b> <span>/ ${unit}</span></p>
+          ${(p.colors || []).length ? `<div class="variants"><span class="vlabel">${t.color}: <b class="pm-vname vreq">${t.chooseColor}</b></span>
+            <div class="swatches">${p.colors.map((c) => { const hx = cHex(c.color); return `<button class="sw${/^#(f|e[ef])/i.test(hx) ? ' lt' : ''}" data-sku="${c.sku}" data-color="${c.color}" data-img="${c.img || ''}" style="--c:${hx}" title="${c.color}"></button>`; }).join('')}</div></div>` : ''}
+          <table class="specs pmspecs"><tbody>${specs.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('')}</tbody></table>
+          <a class="pmfull" href="/${lang}/product/${p.slug}/">${t.openFull}</a>
+        </div>
       </div>
-      <div class="pminfo">
-        <h3>${p.name}</h3>
-        <p class="skuline">${t.sku}: <b>${p.code}</b> · <span class="st">🏭 ${t.statusOrder}</span></p>
-        ${p.motif ? `<p class="motif">${p.motif}</p>` : ''}
-        <p class="bigpr">${p.multi ? t.priceFrom + ' ' : ''}<b>${priceK} ₸</b> <span>/ ${unit}</span></p>
-        ${(p.colors || []).length ? `<div class="variants"><span class="vlabel">${t.color}: <b class="pm-vname vreq">${t.chooseColor}</b></span>
-          <div class="swatches">${p.colors.map((c) => { const hx = cHex(c.color); return `<button class="sw${/^#(f|e[ef])/i.test(hx) ? ' lt' : ''}" data-sku="${c.sku}" data-color="${c.color}" data-img="${c.img || ''}" style="--c:${hx}" title="${c.color}"></button>`; }).join('')}</div></div>` : ''}
-        <div class="qtyrow"><label>${t.qtyIn}:</label>
-          <div class="qtybox"><button type="button" class="qbtn pm-minus">−</button><input class="pm-qty" type="number" inputmode="numeric" min="${moq}" step="${box || 10}" value="${moq}"><button type="button" class="qbtn pm-plus">+</button></div></div>
-        <button class="btn red big pm-add">${t.addCart}</button>
-        <table class="specs pmspecs"><tbody>${specs.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('')}</tbody></table>
-        <a class="pmfull" href="/${lang}/product/${p.slug}/">${t.openFull}</a>
+      <div class="pmbar">
+        <div class="qtybox"><button type="button" class="qbtn pm-minus">−</button><input class="pm-qty" type="number" inputmode="numeric" min="${moq}" step="${box || 10}" value="${moq}"><button type="button" class="qbtn pm-plus">+</button></div>
+        <button class="btn red pm-add">${t.addCart}</button>
       </div></div>`;
     document.body.appendChild(wrap);
     document.body.style.overflow = 'hidden';
