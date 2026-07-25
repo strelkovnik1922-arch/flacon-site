@@ -64,6 +64,14 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .btn.wa{background:#25D366;color:#fff}
 .btn.wa:hover{background:#1eb457}
 .hic{font-size:19px;min-width:40px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+/* фирменные иконки контактов (от CEO 25.07) */
+.socials{display:flex;align-items:center;gap:6px}
+.cicon{min-width:36px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.cicon img{width:28px;height:28px;border-radius:24%;display:block;transition:.15s}
+.cicon:hover img{transform:scale(1.12)}
+.fic{border-radius:24%;vertical-align:-5px;margin-right:7px}
+.btnic{border-radius:24%;margin-right:8px;vertical-align:-4px}
+@media(max-width:430px){.socials .cicon:nth-child(n+4){display:none}} /* на самых узких прячем телефон */
 .btn.mini{min-height:36px;padding:6px 14px;font-size:13.5px;background:#fff;border:1px solid var(--line)}
 .btn[disabled]{opacity:.55;pointer-events:none}
 
