@@ -1,8 +1,8 @@
 ErrorDocument 404 /404.html
 RewriteEngine On
-# старые ссылки ?cat=... и ?q=... ведут в новый каталог
+# старые ссылки ?cat=... и ?q=... ведут в новый каталог (казахский — язык по умолчанию)
 RewriteCond %{QUERY_STRING} (^|&)(cat|q)= [NC]
-RewriteRule ^(index\.html)?$ /ru/catalog/ [R=301,L,QSA]
+RewriteRule ^(index\.html)?$ /kk/catalog/ [R=301,L,QSA]
 # HTML не кэшировать намертво — деплой должен доезжать до клиентов сразу
 <IfModule mod_headers.c>
   <FilesMatch "\.html$">

@@ -69,9 +69,12 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .cicon{min-width:36px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .cicon img{width:28px;height:28px;border-radius:24%;display:block;transition:.15s}
 .cicon:hover img{transform:scale(1.12)}
-.fic{border-radius:24%;vertical-align:-5px;margin-right:7px}
-.btnic{border-radius:24%;margin-right:8px;vertical-align:-4px}
-@media(max-width:430px){.socials .cicon:nth-child(n+4){display:none}} /* на самых узких прячем телефон */
+.fic{display:inline-block;border-radius:24%;vertical-align:-5px;margin-right:7px}
+.btnic{display:inline-block;border-radius:24%;margin-right:8px;vertical-align:-4px}
+/* на мобиле соцы живут в бургер-меню (в шапке не влезали) */
+@media(max-width:920px){.hbar .socials{display:none}}
+.mobmenu .socials{display:flex;gap:10px;padding:14px 0 2px}
+.mobmenu .socials img{width:34px;height:34px}
 .btn.mini{min-height:36px;padding:6px 14px;font-size:13.5px;background:#fff;border:1px solid var(--line)}
 .btn[disabled]{opacity:.55;pointer-events:none}
 
