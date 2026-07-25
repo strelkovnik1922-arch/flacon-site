@@ -70,8 +70,29 @@
   const lettersDigits = (el) => filterInput(el, /[^\p{L}\p{N}\s\-'.@+_]/gu);                                                // компания/мессенджер: + цифры и @
 
   // ---------- заявка ----------
-  function checkout() {
+  async function checkout() {
     const keys = Object.keys(cart); if (!keys.length) return;
+    // страховка: в корзине не должно быть позиций без выбранного цвета
+    // (могло остаться со старой корзины в браузере — тогда просим выбрать)
+    try {
+      const all = await pdata();
+      const bad = keys.filter((k) => {
+        if (k.includes(':')) return false;                       // вариантный SKU — цвет выбран
+        const m = all.find((x) => x.code === k);
+        return m && (m.colors || []).length > 0;                  // у модели есть цвета, а выбран не был
+      });
+      if (bad.length) {
+        const m0 = all.find((x) => x.code === bad[0]);
+        drawer.innerHTML = `${drawerHead('🛒 ' + t.cartTitle)}<div class="items" style="padding:22px 18px;text-align:center">
+          <p style="color:var(--red);font-weight:700;margin-bottom:10px">${t.colorReq}</p>
+          <p style="color:#8a8a8a;font-size:14px;margin-bottom:16px">${bad.join(', ')}</p>
+          <button class="btn red big" id="fix-color">${t.openFull.replace('→', '')}</button>
+          <button class="btn mini" onclick="closeCart()" style="margin-top:10px">${t.contShop}</button></div>`;
+        const fix = $('#fix-color');
+        if (fix) fix.onclick = () => { delete cart[bad[0]]; save(); updateBadge(); window.closeCart(); if (m0) location.href = '/' + FLX.lang + '/product/' + m0.slug + '/'; };
+        return;
+      }
+    } catch { /* не смогли проверить — пропускаем, бот подстрахует */ }
     const cities = (FLX.cities || []).map((c) => `<option>${c}</option>`).join('');
     drawer.innerHTML = `${drawerHead(t.cartTitle)}<div class="items form" style="padding:16px 18px">
       <input id="c-name" placeholder="${t.formName}" autocomplete="name">
