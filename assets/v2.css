@@ -63,6 +63,8 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .btn.ghost:hover{border-color:var(--grey)}
 .btn.wa{background:#25D366;color:#fff}
 .btn.wa:hover{background:#1eb457}
+.btn.tg{background:#229ED9;color:#fff}
+.btn.tg:hover{background:#1b87ba}
 .hic{font-size:19px;min-width:40px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 /* фирменные иконки контактов (от CEO 25.07) */
 .socials{display:flex;align-items:center;gap:6px}

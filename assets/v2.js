@@ -5,6 +5,7 @@
   const $ = (s) => document.querySelector(s);
   const fmtN = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const kzt = (cny) => Math.ceil(cny * FLX.rate);
+  const iv = (p) => '/' + p + (FLX.imgv ? '?v=' + FLX.imgv : '');
 
   // ---------- корзина: localStorage 'cart2' {code:{code,nm,priceCny,moq,unit,img,qty}} ----------
   let cart = {};
@@ -306,8 +307,8 @@
     wrap.innerHTML = `<div class="pmbox" role="dialog" aria-modal="true">
       <button class="pmx" aria-label="Закрыть">×</button>
       <div class="pmgrid">
-        <div class="pmgal"><img class="pmimg" src="/${p.imgs[0]}" alt="">
-          ${p.imgs.length > 1 ? `<div class="pmthumbs">${p.imgs.map((im, i) => `<button class="th${i === 0 ? ' on' : ''}" data-src="/${im}"><img src="/${im}" alt=""></button>`).join('')}</div>` : ''}
+        <div class="pmgal"><img class="pmimg" src="${iv(p.imgs[0])}" alt="">
+          ${p.imgs.length > 1 ? `<div class="pmthumbs">${p.imgs.map((im, i) => `<button class="th${i === 0 ? ' on' : ''}" data-src="${iv(im)}"><img src="${iv(im)}" alt=""></button>`).join('')}</div>` : ''}
         </div>
         <div class="pminfo">
           <h3>${p.name}</h3>
