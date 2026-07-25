@@ -46,10 +46,13 @@ if (!empty($o['photo']) && is_string($o['photo'])
   $photo = $o['photo'];
 }
 $out = [
-  'name'  => clean_str(isset($o['name']) ? $o['name'] : '', 80),
-  'phone' => clean_str($o['phone'], 40),
-  'note'  => clean_str(isset($o['note']) ? $o['note'] : '', 1000),
-  'items' => $items,
+  'name'    => clean_str(isset($o['name']) ? $o['name'] : '', 80),
+  'phone'   => clean_str($o['phone'], 40),
+  'note'    => clean_str(isset($o['note']) ? $o['note'] : '', 1000),
+  'contact' => clean_str(isset($o['contact']) ? $o['contact'] : '', 20),   // WhatsApp / Telegram
+  'city'    => clean_str(isset($o['city']) ? $o['city'] : '', 60),
+  'address' => clean_str(isset($o['address']) ? $o['address'] : '', 200),
+  'items'   => $items,
 ];
 if ($photo) $out['photo'] = $photo;
 $payload = json_encode($out, JSON_UNESCAPED_UNICODE);
@@ -68,7 +71,13 @@ $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 if ($code === 200) {
-  echo '{"ok":true}';
+  // прокидываем ответ бота как есть — там номер заказа МойСклада для показа клиенту
+  $j = json_decode($resp, true);
+  if (is_array($j) && !empty($j['ok'])) {
+    echo json_encode(['ok' => true, 'order' => isset($j['order']) ? $j['order'] : null, 'bot' => isset($j['bot']) ? $j['bot'] : null]);
+  } else {
+    echo '{"ok":true}';
+  }
 } else {
   // заявку не потеряем: продублируем в файл на всякий случай
   @file_put_contents(__DIR__ . '/data/orders_backup.jsonl', $raw . "\n", FILE_APPEND | LOCK_EX);

@@ -72,45 +72,72 @@
   // ---------- заявка ----------
   function checkout() {
     const keys = Object.keys(cart); if (!keys.length) return;
+    const cities = (FLX.cities || []).map((c) => `<option>${c}</option>`).join('');
     drawer.innerHTML = `${drawerHead(t.cartTitle)}<div class="items form" style="padding:16px 18px">
       <input id="c-name" placeholder="${t.formName}" autocomplete="name">
-      <input id="c-company" placeholder="${t.formCompany}" autocomplete="organization">
       <input id="c-phone" placeholder="${t.formPhone}" inputmode="tel" autocomplete="tel">
-      <div class="err" id="c-err">${t.phoneReq}</div>
-      <input id="c-msngr" placeholder="${t.formMsngr}">
-      <input id="c-city" placeholder="${t.formCity}" autocomplete="address-level2">
+      <label class="flbl">${t.contactWay}</label>
+      <div class="waytabs" id="c-way">
+        <button type="button" class="way" data-way="WhatsApp">${t.contactWA}</button>
+        <button type="button" class="way" data-way="Telegram">${t.contactTG}</button>
+      </div>
+      <label class="flbl">${t.cityLbl}</label>
+      <select id="c-city"><option value="">${t.citySel}</option>${cities}</select>
+      <label class="flbl">${t.addrLbl}</label>
+      <input id="c-addr" placeholder="${t.addrHint}">
+      <input id="c-company" placeholder="${t.formCompany}" autocomplete="organization">
       <textarea id="c-note" rows="2" placeholder="${t.formComment}"></textarea>
+      <div class="err" id="c-err">${t.phoneReq}</div>
       <input class="hp" id="c-web" tabindex="-1" autocomplete="off" placeholder="website">
       <button class="btn red big" id="c-send">${t.formSend}</button>
       <p class="agree">${t.formAgree}</p></div>`;
-    phoneOnly($('#c-phone')); lettersOnly($('#c-name')); lettersOnly($('#c-city')); lettersDigits($('#c-company')); lettersDigits($('#c-msngr'));
+    phoneOnly($('#c-phone')); lettersOnly($('#c-name')); lettersDigits($('#c-company'));
+    // способ связи — обязательный выбор кнопкой (решение CEO: только WhatsApp/Telegram, без звонков)
+    drawer.querySelectorAll('.way').forEach((b) => b.onclick = () => {
+      drawer.querySelectorAll('.way').forEach((x) => x.classList.toggle('on', x === b));
+      $('#c-err').style.display = 'none';
+    });
     $('#c-send').onclick = submitOrder;
   }
   async function submitOrder() {
     const err = $('#c-err');
+    const showErr = (msg, focusEl) => { err.textContent = msg; err.style.display = 'block'; if (focusEl) focusEl.focus(); };
     const name = $('#c-name').value.trim();
-    if (name.length < 2) { err.textContent = t.nameReq; err.style.display = 'block'; $('#c-name').focus(); return; }
+    if (name.length < 2) return showErr(t.nameReq, $('#c-name'));
     const phone = $('#c-phone').value.trim();
-    if (!/[\d+][\d\s()-]{6,}/.test(phone)) { err.textContent = t.phoneReq; err.style.display = 'block'; $('#c-phone').focus(); return; }
-    if ($('#c-web').value) return; // honeypot: бот заполнил скрытое поле
+    if (!/[\d+][\d\s()-]{6,}/.test(phone)) return showErr(t.phoneReq, $('#c-phone'));
+    const wayBtn = drawer.querySelector('.way.on');
+    if (!wayBtn) return showErr(t.contactReq);
+    const contact = wayBtn.dataset.way;
+    const city = $('#c-city').value.trim();
+    if (!city) return showErr(t.cityReq, $('#c-city'));
+    const address = $('#c-addr').value.trim();
+    if (address.length < 4) return showErr(t.addrReq, $('#c-addr'));
+    if ($('#c-web').value) return; // honeypot
     const btn = $('#c-send'); btn.disabled = true; btn.textContent = '…';
-    const orderNo = 'FLX-' + Date.now().toString(36).toUpperCase();
     const items = Object.values(cart).map((it) => ({ code: it.code, price: it.priceCny, qty: it.qty }));
-    const note = [`Заявка ${orderNo}`, $('#c-company').value.trim() && ('Компания: ' + $('#c-company').value.trim()),
-      $('#c-msngr').value.trim() && ('Мессенджер: ' + $('#c-msngr').value.trim()),
-      $('#c-city').value.trim() && ('Город: ' + $('#c-city').value.trim()),
-      $('#c-note').value.trim()].filter(Boolean).join(' | ');
+    const note = [$('#c-company').value.trim() && ('Компания: ' + $('#c-company').value.trim()), $('#c-note').value.trim()].filter(Boolean).join(' | ');
     try {
       const r = await fetch('/order2.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: $('#c-name').value.trim(), phone, note, items }) });
+        body: JSON.stringify({ name, phone, note, items, contact, city, address }) });
       if (!r.ok) throw new Error('http ' + r.status);
+      let data = {}; try { data = await r.json(); } catch {}
+      const orderNo = data.order || null;          // номер заказа из МойСклада (решение CEO)
+      const botName = (FLX.cfg && FLX.cfg.bot) || 'FlaconKZ_Opt_bot';
       cart = {}; save(); updateBadge();
-      drawer.innerHTML = `${drawerHead(t.formSent)}<div class="empty" style="padding:30px">
-        ${t.formSentP}: <b>${orderNo}</b><br><br>${t.formSentP2}<br><br>
-        <button class="btn red" onclick="closeCart()" style="max-width:220px;margin:0 auto">OK</button></div>`;
+      const watch = orderNo
+        ? `<a class="btn tg big" href="https://t.me/${botName}?start=order_${orderNo}" target="_blank" rel="noopener" style="margin-bottom:10px">${t.sentWatch}</a>` : '';
+      const waBtn = FLX.cfg && FLX.cfg.wa
+        ? `<a class="btn wa big" href="https://wa.me/${FLX.cfg.wa}?text=${encodeURIComponent((orderNo ? '№' + orderNo + '. ' : '') + name)}" target="_blank" rel="noopener">${t.sentWrite}</a>` : '';
+      drawer.innerHTML = `${drawerHead(t.sentTitle)}<div class="items" style="padding:24px 18px;text-align:center">
+        ${orderNo ? `<p style="font-size:15px;color:#8a8a8a;margin-bottom:4px">${t.sentOrder}</p>
+          <p style="font-size:30px;font-weight:800;color:var(--red);margin-bottom:16px">№${orderNo}</p>` : ''}
+        <p style="margin-bottom:20px">${t.sentWhat}</p>
+        ${watch}${waBtn}
+        <button class="btn mini" onclick="closeCart()" style="margin-top:14px">OK</button></div>`;
     } catch (e) {
       btn.disabled = false; btn.textContent = t.formSend;
-      let err = $('#c-err'); err.textContent = t.formErr; err.style.display = 'block';
+      showErr(t.formErr);
     }
   }
 
