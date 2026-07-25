@@ -294,7 +294,7 @@
   }
   function productModal(p) {
     const box = p.box || 0;
-    const moq = box || p.moq || 1;
+    const moq = box || p.moq || (p.unit === 'г' ? 100 : 1); // граммовые — от 100 г
     const unit = p.unit === 'г' ? t.perGram : t.apiece;
     const priceK = fmtN(kzt(p.priceCny));
     const lang = FLX.lang;
