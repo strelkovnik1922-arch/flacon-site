@@ -148,7 +148,7 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .pageh{margin:4px 0 12px}
 .pgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;margin-top:6px}
 .gal .galmain{width:100%;border:1px solid var(--line);border-radius:var(--r-l);background:#fff;overflow:hidden;padding:0}
-.gal .galmain img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff}
+.gal .galmain img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:#fff} /* height:auto ОБЯЗАТЕЛЕН: иначе атрибут height=800 растягивает кадр белым (баг 25.07) */
 .thumbs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .th{width:64px;height:64px;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;padding:0}
 .th.on{border-color:var(--red)}
@@ -262,7 +262,7 @@ main .btn.line:hover{background:var(--red);color:#fff}
 .pmx{position:absolute;top:8px;right:10px;background:#fff;border:1px solid var(--line);border-radius:50%;font-size:26px;line-height:1;color:var(--grey);width:44px;height:44px;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .pmx:hover{color:var(--ink)}
 .pmgrid{overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px;padding-top:30px}
-.pmgal .pmimg{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:var(--r-m)}
+.pmgal .pmimg{width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:var(--r-m)}
 .pmthumbs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .pminfo h3{font-size:20px;margin-bottom:6px;padding-right:30px}
 .pminfo .bigpr{margin:8px 0}
