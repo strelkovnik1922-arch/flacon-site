@@ -165,8 +165,14 @@
       if (box) q = Math.ceil(q / box) * box; // заказ целыми коробками
       qty.value = q;
       cart[key()] = { code: key(), nm: d.nm + (vcolor ? ' (' + vcolor + ')' : ''), priceCny: parseFloat(d.price), moq, box, unit: d.unit, img: '/' + d.img, qty: q };
-      save(); updateBadge(); setBtn(); window.openCart();
+      save(); updateBadge(); setBtn();
+      toast(t.addedToast); // корзину не открываем — только тост (правка 24.07)
     };
+    // кнопки ± у количества (просьба: на мобильном нельзя было менять кнопками)
+    const qm = $('#qminus'), qp = $('#qplus');
+    const moq0 = parseInt(d.moq, 10) || 1, box0 = parseInt(d.box, 10) || 0;
+    if (qm) qm.onclick = () => stepQty(qty, -1, moq0, box0, d.unit);
+    if (qp) qp.onclick = () => stepQty(qty, +1, moq0, box0, d.unit);
 
     // галерея
     const gal = window.GAL || [];
@@ -255,6 +261,112 @@
       }
     };
   };
+
+  // ---------- тост (3 сек) ----------
+  let toastEl = null, toastTimer = null;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'toast'; document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3000);
+  }
+
+  // ---------- количество: общий помощник (кратно коробке) ----------
+  function stepQty(input, dir, moq, box, unit) {
+    const stp = box || (unit === 'г' ? 100 : 10);
+    let q = (parseInt(input.value, 10) || moq) + dir * stp;
+    q = Math.max(moq, q);
+    if (box) q = Math.ceil(q / box) * box;
+    input.value = q;
+  }
+
+  // ---------- поп-ап товара (клик по карточке в каталоге/на главной) ----------
+  let PDATA = null;
+  async function pdata() {
+    if (!PDATA) { try { PDATA = await (await fetch('/data/products2.json')).json(); } catch { PDATA = []; } }
+    return PDATA;
+  }
+  // цвет → кружок (для поп-апа; полная палитра — на странице товара)
+  function cHex(name) {
+    const n = String(name).toLowerCase();
+    const M = { 'черн': '#1a1a1a', 'бел': '#ffffff', 'золот': '#C9A24B', 'серебр': '#c0c0c0', 'красн': '#C8102E', 'розов': '#e79cc0', 'син': '#2456a5', 'голуб': '#7db4e0', 'зелен': '#2f7d3b', 'бирюз': '#30b3a9', 'желт': '#e8c331', 'оранж': '#e07820', 'фиолет': '#7b4397', 'пурпур': '#9b2d78', 'коричн': '#6b4423', 'кофейн': '#6f5540', 'сер': '#8a8a8a', 'беж': '#d9c4a3', 'малинов': '#c2185b', 'прозрачн': '#eef3f5', 'матов': '#dddddd' };
+    for (const k in M) if (n.includes(k)) return M[k];
+    return '#cccccc';
+  }
+  function productModal(p) {
+    const box = p.box || 0;
+    const moq = box || p.moq || 1;
+    const unit = p.unit === 'г' ? t.perGram : t.apiece;
+    const priceK = fmtN(kzt(p.priceCny));
+    const lang = FLX.lang;
+    const specs = [[t.sku, p.code], [t.vol, p.vol], [t.glass, p.glass], [t.shape, p.shape], [t.roller, p.roller],
+      [t.moq, moq ? fmtN(moq) : ''], [t.box, box ? fmtN(box) : '']].filter(([, v]) => v);
+    const wrap = document.createElement('div');
+    wrap.className = 'pmodal';
+    wrap.innerHTML = `<div class="pmbox" role="dialog" aria-modal="true">
+      <button class="pmx" aria-label="Закрыть">×</button>
+      <div class="pmgal"><img class="pmimg" src="/${p.imgs[0]}" alt="">
+        ${p.imgs.length > 1 ? `<div class="pmthumbs">${p.imgs.map((im, i) => `<button class="th${i === 0 ? ' on' : ''}" data-src="/${im}"><img src="/${im}" alt=""></button>`).join('')}</div>` : ''}
+      </div>
+      <div class="pminfo">
+        <h3>${p.name}</h3>
+        <p class="skuline">${t.sku}: <b>${p.code}</b> · <span class="st">🏭 ${t.statusOrder}</span></p>
+        ${p.motif ? `<p class="motif">${p.motif}</p>` : ''}
+        <p class="bigpr">${p.multi ? t.priceFrom + ' ' : ''}<b>${priceK} ₸</b> <span>/ ${unit}</span></p>
+        ${(p.colors || []).length ? `<div class="variants"><span class="vlabel">${t.color}: <b class="pm-vname vreq">${t.chooseColor}</b></span>
+          <div class="swatches">${p.colors.map((c) => { const hx = cHex(c.color); return `<button class="sw${/^#(f|e[ef])/i.test(hx) ? ' lt' : ''}" data-sku="${c.sku}" data-color="${c.color}" data-img="${c.img || ''}" style="--c:${hx}" title="${c.color}"></button>`; }).join('')}</div></div>` : ''}
+        <div class="qtyrow"><label>${t.qtyIn}:</label>
+          <div class="qtybox"><button type="button" class="qbtn pm-minus">−</button><input class="pm-qty" type="number" inputmode="numeric" min="${moq}" step="${box || 10}" value="${moq}"><button type="button" class="qbtn pm-plus">+</button></div></div>
+        <button class="btn red big pm-add">${t.addCart}</button>
+        <table class="specs pmspecs"><tbody>${specs.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('')}</tbody></table>
+        <a class="pmfull" href="/${lang}/product/${p.slug}/">${t.openFull}</a>
+      </div></div>`;
+    document.body.appendChild(wrap);
+    document.body.style.overflow = 'hidden';
+    const close = () => { wrap.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', onEsc); };
+    const onEsc = (e) => { if (e.key === 'Escape') close(); };
+    document.addEventListener('keydown', onEsc);
+    wrap.addEventListener('click', (e) => { if (e.target === wrap) close(); });
+    wrap.querySelector('.pmx').onclick = close;
+    // галерея
+    wrap.querySelectorAll('.pmthumbs .th').forEach((th) => th.onclick = () => {
+      wrap.querySelector('.pmimg').src = th.dataset.src;
+      wrap.querySelectorAll('.pmthumbs .th').forEach((x) => x.classList.toggle('on', x === th));
+    });
+    // цвет (обязателен, если есть)
+    let vsku = '', vcolor = '';
+    const vname = wrap.querySelector('.pm-vname');
+    wrap.querySelectorAll('.sw').forEach((sw) => sw.onclick = () => {
+      wrap.querySelectorAll('.sw').forEach((x) => x.classList.remove('on'));
+      sw.classList.add('on');
+      vsku = sw.dataset.sku; vcolor = sw.dataset.color;
+      if (vname) { vname.textContent = vcolor; vname.classList.remove('vreq'); }
+      if (sw.dataset.img) wrap.querySelector('.pmimg').src = '/' + sw.dataset.img;
+    });
+    // количество
+    const qi = wrap.querySelector('.pm-qty');
+    wrap.querySelector('.pm-minus').onclick = () => stepQty(qi, -1, moq, box, p.unit);
+    wrap.querySelector('.pm-plus').onclick = () => stepQty(qi, +1, moq, box, p.unit);
+    // в корзину
+    wrap.querySelector('.pm-add').onclick = () => {
+      if ((p.colors || []).length && !vsku) { toast(t.colorReq); return; }
+      let q = parseInt(qi.value, 10) || moq;
+      if (q < moq) q = moq;
+      if (box) q = Math.ceil(q / box) * box;
+      qi.value = q;
+      const key2 = vsku || p.code;
+      cart[key2] = { code: key2, nm: p.name + (vcolor ? ' (' + vcolor + ')' : ''), priceCny: p.priceCny, moq, box, unit: p.unit, img: '/' + p.imgs[0], qty: q };
+      save(); updateBadge(); toast(t.addedToast);
+    };
+  }
+  // перехват клика по карточкам (обычный клик — поп-ап; ctrl/средняя кнопка — обычная ссылка)
+  document.addEventListener('click', async (e) => {
+    const card2 = e.target.closest('.card[data-slug]');
+    if (!card2 || e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    const p = (await pdata()).find((x) => x.slug === card2.dataset.slug);
+    if (!p) { location.href = card2.href; return; }
+    productModal(p);
+  });
 
   // ---------- бургер-меню (мобайл) ----------
   const burger = $('#burger'), mobmenu = $('#mobmenu');
