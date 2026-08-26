@@ -1,3 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /order.php
+Disallow: /order2.php
+Disallow: /data/
 Sitemap: https://flacon.kz/sitemap.xml
