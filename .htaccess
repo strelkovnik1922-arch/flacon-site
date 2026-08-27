@@ -5,6 +5,8 @@ RewriteCond %{QUERY_STRING} (^|&)(cat|q)= [NC]
 RewriteRule ^(index\.html)?$ /kk/catalog/ [R=301,L,QSA]
 # HTML не кэшировать намертво — деплой должен доезжать до клиентов сразу
 <IfModule mod_headers.c>
+  # HSTS — браузер всегда ходит только по https (год, включая поддомены), без отката на http
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
