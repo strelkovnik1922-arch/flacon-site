@@ -59,7 +59,7 @@
   function step(k, dir) {
     const it = cart[k]; if (!it) return;
     // шаг = коробка (заказ целыми коробками); без коробки — как раньше
-    const stp = it.box || (it.unit === 'г' ? 100 : Math.max(10, Math.round((it.moq || 10) / 10)));
+    const stp = it.box || (it.unit === 'г' ? 500 : Math.max(10, Math.round((it.moq || 10) / 10)));
     it.qty = Math.max(it.moq || 1, it.qty + dir * stp);
     if (it.box) it.qty = Math.ceil(it.qty / it.box) * it.box;
     save(); drawCart(); updateBadge();
@@ -323,7 +323,7 @@
 
   // ---------- количество: общий помощник (кратно коробке) ----------
   function stepQty(input, dir, moq, box, unit) {
-    const stp = box || (unit === 'г' ? 100 : 10);
+    const stp = box || (unit === 'г' ? 500 : 10);
     let q = (parseInt(input.value, 10) || moq) + dir * stp;
     q = Math.max(moq, q);
     if (box) q = Math.ceil(q / box) * box;
@@ -345,7 +345,7 @@
   }
   function productModal(p) {
     const box = p.box || 0;
-    const moq = box || p.moq || (p.unit === 'г' ? 100 : 1); // граммовые — от 100 г
+    const moq = p.unit === 'г' ? Math.max(box || p.moq || 0, 500) : (box || p.moq || 1); // граммовые — от 500 г (CEO 26.08)
     const unit = p.unit === 'г' ? t.perGram : t.apiece;
     const priceK = fmtN(kzt(p.priceCny));
     const lang = FLX.lang;
@@ -372,7 +372,7 @@
         </div>
       </div>
       <div class="pmbar">
-        <div class="qtybox"><button type="button" class="qbtn pm-minus">−</button><input class="pm-qty" type="number" inputmode="numeric" min="${moq}" step="${box || 10}" value="${moq}"><button type="button" class="qbtn pm-plus">+</button></div>
+        <div class="qtybox"><button type="button" class="qbtn pm-minus">−</button><input class="pm-qty" type="number" inputmode="numeric" min="${moq}" step="${box || (p.unit === 'г' ? 500 : 10)}" value="${moq}"><button type="button" class="qbtn pm-plus">+</button></div>
         <button class="btn red pm-add">${t.addCart}</button>
       </div></div>`;
     document.body.appendChild(wrap);
