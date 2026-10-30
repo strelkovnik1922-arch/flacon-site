@@ -1,10 +1,12 @@
 // Flacon.kz v2 — корзина (общая для языков), фильтры каталога, галерея товара, заявка.
 (function () {
-  const FLX = window.FLX || { lang: 'ru', rate: 69, t: {} };
+  const FLX = window.FLX || { lang: 'ru', rate: 69, uplift: 1, t: {} };
   const t = FLX.t;
   const $ = (s) => document.querySelector(s);
   const fmtN = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  const kzt = (cny) => Math.ceil(cny * FLX.rate);
+  // Множитель цен (CEO 29.10): корзина и товар должны показывать ту же цену, что и страницы (с +5%).
+  const UPLIFT = Number(FLX.uplift) > 0 ? Number(FLX.uplift) : 1;
+  const kzt = (cny) => Math.ceil(cny * FLX.rate * UPLIFT);
   const iv = (p) => '/' + p + (FLX.imgv ? '?v=' + FLX.imgv : '');
 
   // ---------- корзина: localStorage 'cart2' {code:{code,nm,priceCny,moq,unit,img,qty}} ----------
@@ -142,7 +144,7 @@
     const note = [$('#c-company').value.trim() && ('Компания: ' + $('#c-company').value.trim()), $('#c-note').value.trim()].filter(Boolean).join(' | ');
     try {
       const r = await fetch('/order2.php', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, note, items, contact, city, address, rate: FLX.rate }) });
+        body: JSON.stringify({ name, phone, note, items, contact, city, address, rate: FLX.rate, uplift: UPLIFT }) });
       if (!r.ok) throw new Error('http ' + r.status);
       let data = {}; try { data = await r.json(); } catch {}
       const orderNo = data.order || null;          // номер заказа из МойСклада (решение CEO)
